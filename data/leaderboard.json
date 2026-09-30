@@ -108,13 +108,13 @@
     "Session ID": "7b357f81-67fe-4939-97a1-3c5b5ac1dbe2",
     "Team Name": "hvjkj",
     "Team Members": "adas",
-    "Month": 1,
-    "Selected Activity": "Changeover Time Optimization (SMED)",
-    "Cumulative Profit": 432.5,
-    "Capital Budget Remaining": 1125.0,
-    "Updated At": "2026-09-30T16:57:01.054174",
-    "Productivity": 85.0,
-    "Quality %": 75.0,
-    "Manufacturing Cost": 28.0
+    "Month": 2,
+    "Selected Activity": "Statistical Process Control",
+    "Cumulative Profit": 1164.5,
+    "Capital Budget Remaining": 825.0,
+    "Updated At": "2026-09-30T16:57:56.215499",
+    "Productivity": 86.0,
+    "Quality %": 78.0,
+    "Manufacturing Cost": 27.0
   }
 }
