@@ -1,0 +1,38 @@
+{
+  "starting_budget": 100,
+  "selling_price": 50,
+  "baseline": {"productivity": 80, "quality": 0.75, "manufacturing_cost": 30},
+  "repeat_multipliers": [1.0, 0.4, 0.15],
+  "activities": {
+    "Statistical Process Control": {
+      "icon":"📊", "investment":15,
+      "productivity_gain":[0,1,2,2], "quality_gain":[0.03,0.04,0.05,0.05], "cost_reduction":[1,2,3,3]
+    },
+    "Preventive Maintenance": {
+      "icon":"🔧", "investment":15,
+      "productivity_gain":[2,3,4,5], "quality_gain":[0.01,0.02,0.03,0.03], "cost_reduction":[1,2,2.5,3]
+    },
+    "SMED Changeover Optimization": {
+      "icon":"⏱️", "investment":20,
+      "productivity_gain":[8,10,12,13], "quality_gain":[0,0.01,0.02,0.02], "cost_reduction":[1.5,2.5,3,3.5]
+    },
+    "Operator Training & Performance Management": {
+      "icon":"👷", "investment":10,
+      "productivity_gain":[3,4,5,6], "quality_gain":[0.02,0.03,0.04,0.04], "cost_reduction":[0.5,1,1.5,2]
+    },
+    "Additional Equipment Installation": {
+      "icon":"🏗️", "investment":30,
+      "productivity_gain":[4,7,10,15], "quality_gain":[0,0,0.01,0.01], "cost_reduction":[0.5,1,1.5,2]
+    },
+    "Increase Bottleneck Speed": {
+      "icon":"⚙️", "investment":20,
+      "productivity_gain":[10,12,12,10], "quality_gain":[-0.04,-0.04,-0.03,-0.03], "cost_reduction":[0.5,0.5,1,1]
+    }
+  },
+  "optimal_benchmark": {
+    "year_1":{"productivity":83,"quality":0.80,"manufacturing_cost":28.5,"investment":25,"profit":929.5},
+    "year_2":{"productivity":96,"quality":0.83,"manufacturing_cost":24,"investment":35,"profit":1645},
+    "year_3":{"productivity":98.4,"quality":0.862,"manufacturing_cost":21.8,"investment":30,"profit":2065.92},
+    "year_4":{"productivity":100.8,"quality":0.878,"manufacturing_cost":21,"investment":10,"profit":2298.32}
+  }
+}
