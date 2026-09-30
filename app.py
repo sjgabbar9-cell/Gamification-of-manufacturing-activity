@@ -182,8 +182,12 @@ def get_leaderboard():
 def initial_state():
     return {"month":0,"capital_budget":BASELINE["capital_budget"],"selections":{},"productivity":BASELINE["productivity"],"quality":BASELINE["quality"],"manufacturing_cost":BASELINE["manufacturing_cost"],"cumulative_profit":0.0,"history":[]}
 
-def portfolio_metrics(selections,current_month,new_activity):
-    active=dict(selections);active[current_month]=new_activity
+def portfolio_metrics(selections,current_month,new_activity=None):
+    # Earlier selections remain active and advance one maturity month even when
+    # no new activity can be purchased because the capital budget is exhausted.
+    active=dict(selections)
+    if new_activity:
+        active[current_month]=new_activity
     productivity=BASELINE["productivity"];quality=BASELINE["quality"];cost=BASELINE["manufacturing_cost"];stages=[]
     for selected_month,activity_name in sorted(active.items()):
         stage=current_month-selected_month
@@ -193,11 +197,11 @@ def portfolio_metrics(selections,current_month,new_activity):
         cost-=activity["cost_reduction"][stage]
         stages.append(f"{activity_name}: M{stage+1}")
     quality=max(0,min(1,quality));cost=max(0,cost)
-    capital=ACTIVITIES[new_activity]["capital_cost"]
+    capital=ACTIVITIES[new_activity]["capital_cost"] if new_activity else 0.0
     good_tiles=productivity*quality
     landed=(productivity*cost+capital)/good_tiles if good_tiles else 0
     profit=good_tiles*BASELINE["selling_price"]-productivity*cost-capital
-    return {"productivity":productivity,"quality":quality,"manufacturing_cost":cost,"capital_cost":capital,"landed_cost":landed,"monthly_profit":profit,"stages":" | ".join(stages)}
+    return {"productivity":productivity,"quality":quality,"manufacturing_cost":cost,"capital_cost":capital,"landed_cost":landed,"monthly_profit":profit,"stages":" | ".join(stages) if stages else "Baseline only"}
 
 def diagnosis(metrics,previous=None):
     parts=[
@@ -210,21 +214,29 @@ def diagnosis(metrics,previous=None):
         parts.append(f"Monthly profit {'increased' if delta>=0 else 'decreased'} by {abs(delta):.1f} versus the previous month.")
     return " ".join(parts)
 
-def run_month():
+def run_month(continue_without_activity=False):
     state=st.session_state.state.copy();state["selections"]=dict(state["selections"]);state["history"]=list(state["history"])
-    month=state["month"]+1;selected=st.session_state.get("selected_activity")
-    if not selected:st.error("Select one activity for this month.");return
-    if selected in state["selections"].values():st.error("This activity has already been selected.");return
-    capital=ACTIVITIES[selected]["capital_cost"]
+    month=state["month"]+1
+    selected=None if continue_without_activity else st.session_state.get("selected_activity")
+    if not selected and not continue_without_activity:st.error("Select one activity for this month.");return
+    if selected and selected in state["selections"].values():st.error("This activity has already been selected.");return
+    capital=ACTIVITIES[selected]["capital_cost"] if selected else 0.0
     if capital>state["capital_budget"]:st.error("The selected activity exceeds the remaining capital budget.");return
-    metrics=portfolio_metrics(state["selections"],month,selected);previous=state["history"][-1] if state["history"] else None;metrics.update({"month":month,"selected":selected,"diagnosis":diagnosis(metrics,previous)})
-    state["month"]=month;state["capital_budget"]-=capital;state["selections"][month]=selected;state["productivity"]=metrics["productivity"];state["quality"]=metrics["quality"];state["manufacturing_cost"]=metrics["manufacturing_cost"];state["cumulative_profit"]+=metrics["monthly_profit"];state["history"].append(metrics);st.session_state.state=state
-    row={"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":month,"Selected Activity":selected,"Productivity":metrics["productivity"],"Quality %":metrics["quality"]*100,"Manufacturing Cost":metrics["manufacturing_cost"],"Landed Cost":metrics["landed_cost"],"Selling Price":BASELINE["selling_price"],"Monthly Profit":metrics["monthly_profit"],"Cumulative Profit":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Updated At":datetime.now().strftime("%Y-%m-%d %H:%M:%S")};update_leaderboard(row)
+    metrics=portfolio_metrics(state["selections"],month,selected);previous=state["history"][-1] if state["history"] else None
+    selection_label=selected if selected else "No New Activity - Existing Effects Continue"
+    metrics.update({"month":month,"selected":selection_label,"diagnosis":diagnosis(metrics,previous)})
+    state["month"]=month;state["capital_budget"]-=capital
+    if selected:state["selections"][month]=selected
+    state["productivity"]=metrics["productivity"];state["quality"]=metrics["quality"];state["manufacturing_cost"]=metrics["manufacturing_cost"];state["cumulative_profit"]+=metrics["monthly_profit"];state["history"].append(metrics);st.session_state.state=state
+    row={"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":month,"Selected Activity":selection_label,"Productivity":metrics["productivity"],"Quality %":metrics["quality"]*100,"Manufacturing Cost":metrics["manufacturing_cost"],"Landed Cost":metrics["landed_cost"],"Selling Price":BASELINE["selling_price"],"Monthly Profit":metrics["monthly_profit"],"Cumulative Profit":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Updated At":datetime.now().strftime("%Y-%m-%d %H:%M:%S")};update_leaderboard(row)
     if github_configured():
-        log={"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":month,"Selected Activity":selected,"Active Activity Stages":metrics["stages"],"Productivity":metrics["productivity"],"Quality %":metrics["quality"]*100,"Manufacturing Cost":metrics["manufacturing_cost"],"Capital Cost":capital,"Landed Cost":metrics["landed_cost"],"Selling Price":BASELINE["selling_price"],"Monthly Profit":metrics["monthly_profit"],"Cumulative Profit":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Diagnosis":metrics["diagnosis"],"Created At":datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        log={"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":month,"Selected Activity":selection_label,"Active Activity Stages":metrics["stages"],"Productivity":metrics["productivity"],"Quality %":metrics["quality"]*100,"Manufacturing Cost":metrics["manufacturing_cost"],"Capital Cost":capital,"Landed Cost":metrics["landed_cost"],"Selling Price":BASELINE["selling_price"],"Monthly Profit":metrics["monthly_profit"],"Cumulative Profit":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Diagnosis":metrics["diagnosis"],"Created At":datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         try:append_remote_csv(LOG_PATH,log,LOG_COLUMNS,f"Add Month {month} result")
         except Exception as error:st.warning(f"Month completed; GitHub save failed: {error}")
     st.rerun()
+
+def continue_with_existing_effects():
+    run_month(continue_without_activity=True)
 
 # =============================================================================
 # UI HELPERS
@@ -289,10 +301,15 @@ def dashboard_page():
         cols=st.columns(2)
         for index,(name,activity) in enumerate(ACTIVITIES.items()):
             with cols[index%2]:st.markdown(activity_card(name,activity,name in used or activity["capital_cost"]>state["capital_budget"]),unsafe_allow_html=True)
-        selected=st.selectbox("Choose the Month activity",available,index=None,placeholder="Select one activity",key=f"selection_month_{month}");st.session_state.selected_activity=selected
-        if selected:
-            capital=ACTIVITIES[selected]["capital_cost"];a,b,c=st.columns(3);a.metric("Current Capital Budget",f"{state['capital_budget']:,.0f}");b.metric("Selected Capital Cost",f"{capital:,.0f}");c.metric("Budget After",f"{state['capital_budget']-capital:,.0f}")
-        st.button(f"Run Month {month} ▶",type="primary",use_container_width=True,disabled=not selected,on_click=run_month)
+        if available:
+            selected=st.selectbox("Choose the Month activity",available,index=None,placeholder="Select one activity",key=f"selection_month_{month}");st.session_state.selected_activity=selected
+            if selected:
+                capital=ACTIVITIES[selected]["capital_cost"];a,b,c=st.columns(3);a.metric("Current Capital Budget",f"{state['capital_budget']:,.0f}");b.metric("Selected Capital Cost",f"{capital:,.0f}");c.metric("Budget After",f"{state['capital_budget']-capital:,.0f}")
+            st.button(f"Run Month {month} ▶",type="primary",use_container_width=True,disabled=not selected,on_click=run_month)
+        else:
+            st.session_state.selected_activity=None
+            st.info("No unused activity is affordable with the remaining capital budget. Continue to the next month so all previously selected activities mature and their remaining effects are applied.")
+            st.button(f"Continue to Month {month} with Existing Effects ▶",type="primary",use_container_width=True,on_click=continue_with_existing_effects)
     else:
         st.success(f"Simulation complete. Four-month cumulative profit: {state['cumulative_profit']:,.1f}. Capital budget remaining: {state['capital_budget']:,.1f}.")
         st.info("Leaderboard ranking is based only on cumulative profit. Unspent capital budget carries no penalty.")
