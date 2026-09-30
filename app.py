@@ -106,9 +106,10 @@ ACTIVITIES = {
 
 # =============================================================================
 # SHARED LEADERBOARD CONFIGURATION
-# One JSON file per browser session prevents one player from overwriting another.
+# All sessions are stored in one pre-created JSON object keyed by Session ID.
+# Updates use optimistic concurrency and retry after a GitHub SHA conflict.
 # =============================================================================
-LEADERBOARD_FOLDER = "data/leaderboard_sessions"
+LEADERBOARD_FILE = "data/leaderboard.json"
 
 
 def github_configured():
@@ -123,6 +124,7 @@ def github_headers():
         "Authorization": f"Bearer {st.secrets['GITHUB_TOKEN']}",
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
+        "Cache-Control": "no-cache",
     }
 
 
@@ -137,86 +139,83 @@ def branch_name():
     return st.secrets.get("GITHUB_BRANCH", "main")
 
 
-def get_file(path):
+def read_shared_leaderboard():
     response = requests.get(
-        github_url(path),
+        github_url(LEADERBOARD_FILE),
         headers=github_headers(),
-        params={"ref": branch_name()},
+        params={"ref": branch_name(), "_": datetime.now().timestamp()},
         timeout=30,
     )
     if response.status_code == 404:
-        return None, None
+        raise RuntimeError(
+            "data/leaderboard.json is missing in GitHub. Upload the supplied "
+            "leaderboard.json file inside the repository data folder."
+        )
     response.raise_for_status()
     payload = response.json()
-    return base64.b64decode(payload["content"]).decode("utf-8"), payload["sha"]
+    raw = base64.b64decode(payload["content"]).decode("utf-8").strip()
+    records = json.loads(raw or "{}")
+    if not isinstance(records, dict):
+        raise RuntimeError("data/leaderboard.json must contain a JSON object: {}")
+    return records, payload["sha"]
 
 
-def put_json(path, record, message):
-    for attempt in range(4):
-        _, sha = get_file(path)
-        body = {
-            "message": message,
-            "content": base64.b64encode(
-                json.dumps(record, ensure_ascii=False, indent=2).encode("utf-8")
-            ).decode("ascii"),
-            "branch": branch_name(),
-        }
-        if sha:
-            body["sha"] = sha
-        response = requests.put(
-            github_url(path), headers=github_headers(), json=body, timeout=30
-        )
-        if response.status_code in (200, 201):
-            return
-        if response.status_code not in (409, 422) or attempt == 3:
-            response.raise_for_status()
-
-
-def session_path(session_id):
-    safe_id = "".join(ch for ch in str(session_id) if ch.isalnum() or ch in "-_")
-    return f"{LEADERBOARD_FOLDER}/{safe_id}.json"
+def write_shared_leaderboard(records, sha, message):
+    body = {
+        "message": message,
+        "content": base64.b64encode(
+            json.dumps(records, ensure_ascii=False, indent=2).encode("utf-8")
+        ).decode("ascii"),
+        "branch": branch_name(),
+        "sha": sha,
+    }
+    return requests.put(
+        github_url(LEADERBOARD_FILE),
+        headers=github_headers(),
+        json=body,
+        timeout=30,
+    )
 
 
 def save_player(record):
+    session_id = str(record["Session ID"])
     local = st.session_state.get("local_players", {})
-    local[str(record["Session ID"])] = record
+    local[session_id] = record
     st.session_state.local_players = local
-    if github_configured():
-        put_json(
-            session_path(record["Session ID"]),
-            record,
-            f"Update leaderboard player {record['Team Name']}",
+
+    if not github_configured():
+        raise RuntimeError(
+            "GitHub storage is not configured. Add GITHUB_TOKEN, GITHUB_OWNER, "
+            "GITHUB_REPO, and GITHUB_BRANCH to Streamlit secrets."
         )
+
+    # Read the newest shared object before every write, merge this session only,
+    # and retry the full read-merge-write cycle if another player wrote first.
+    for attempt in range(8):
+        records, sha = read_shared_leaderboard()
+        records[session_id] = record
+        response = write_shared_leaderboard(
+            records,
+            sha,
+            f"Update shared leaderboard: {record['Team Name']}",
+        )
+        if response.status_code in (200, 201):
+            return
+        if response.status_code in (409, 422):
+            continue
+        response.raise_for_status()
+    raise RuntimeError(
+        "Leaderboard was busy after 8 update attempts. Please press the month button once more."
+    )
 
 
 def shared_players():
     records = {}
     if github_configured():
-        response = requests.get(
-            github_url(LEADERBOARD_FOLDER),
-            headers=github_headers(),
-            params={"ref": branch_name()},
-            timeout=30,
-        )
-        if response.status_code not in (200, 404):
-            response.raise_for_status()
-        if response.status_code == 200:
-            for item in response.json():
-                if item.get("type") != "file" or not item.get("name", "").endswith(".json"):
-                    continue
-                try:
-                    file_response = requests.get(
-                        item["url"], headers=github_headers(), timeout=30
-                    )
-                    file_response.raise_for_status()
-                    payload = file_response.json()
-                    record = json.loads(
-                        base64.b64decode(payload["content"]).decode("utf-8")
-                    )
-                    records[str(record["Session ID"])] = record
-                except Exception:
-                    continue
+        records, _ = read_shared_leaderboard()
 
+    # Merge current browser state so the active player appears immediately even
+    # while GitHub propagation completes. Session ID keeps all players separate.
     for session_id, local_record in st.session_state.get("local_players", {}).items():
         shared_record = records.get(session_id)
         if not shared_record or str(local_record.get("Updated At", "")) >= str(
@@ -492,7 +491,16 @@ def result_trend(history):
 
 
 def leaderboard_section():
-    st.subheader("🏅 Live Shared Leaderboard")
+    title_col, refresh_col = st.columns([5, 1])
+    with title_col:
+        st.subheader("🏅 Live Shared Leaderboard")
+    with refresh_col:
+        if st.button("Refresh ↻", use_container_width=True, key="refresh_shared_leaderboard"):
+            st.rerun()
+    if github_configured():
+        st.caption("Shared storage connected: data/leaderboard.json")
+    else:
+        st.error("Shared storage is not connected. Other active players cannot appear until GitHub secrets are configured.")
     try:
         records = shared_players()
     except Exception as error:
@@ -527,7 +535,7 @@ def leaderboard_section():
         hide_index=True,
     )
     if not github_configured():
-        st.caption("Cross-device shared results require GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, and GITHUB_BRANCH in Streamlit secrets.")
+        st.caption("Configure GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, and GITHUB_BRANCH in Streamlit secrets, then use Refresh.")
 
 # =============================================================================
 # PAGES
