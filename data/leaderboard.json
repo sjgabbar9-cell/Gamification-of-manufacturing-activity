@@ -103,5 +103,18 @@
     "Cumulative Profit": 0.0,
     "Capital Budget Remaining": 1500.0,
     "Updated At": "2026-09-30 16:55:08.077715"
+  },
+  "7b357f81-67fe-4939-97a1-3c5b5ac1dbe2": {
+    "Session ID": "7b357f81-67fe-4939-97a1-3c5b5ac1dbe2",
+    "Team Name": "hvjkj",
+    "Team Members": "adas",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30T16:56:43.993605",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
