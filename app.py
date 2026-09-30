@@ -26,11 +26,11 @@ ACTIVITIES = {
     "Parallel Equipment Installation (Line Balancing)": {
         "icon": "🏭",
         "capital_cost": 750.0,
-        "productivity_increment": [5.0, 0.0, 0.0, 0.0],
+        "productivity_increment": [10.0, 0.0, 0.0, 0.0],
         "quality_increment": [0.00, 0.00, 0.00, 0.00],
         "cost_reduction_increment": [1.0, 0.0, 0.0, 0.0],
         "effect_lines": {
-            "Productivity": "+5 products/month in the activation month; the improved level then remains constant.",
+            "Productivity": "+10 products/month in the activation month; the improved level then remains constant.",
             "Quality": "No change in the activation month or later active months.",
             "Manufacturing Cost": "Decreases by 1 per product in the activation month; the reduced level then remains constant.",
         },
@@ -40,11 +40,11 @@ ACTIVITIES = {
         "capital_cost": 375.0,
         "productivity_increment": [5.0, 1.0, 1.0, 1.0],
         "quality_increment": [0.00, 0.00, 0.00, 0.00],
-        "cost_reduction_increment": [2.0, 1.0, 1.0, 1.0],
+        "cost_reduction_increment": [1.0, 1.0, 1.0, 1.0],
         "effect_lines": {
             "Productivity": "+5 products/month in Active M1, then +1 product/month in each later active month.",
             "Quality": "No change in any active month.",
-            "Manufacturing Cost": "Decreases by 2 per product in Active M1, then by 1 per product in each later active month.",
+            "Manufacturing Cost": "Decreases by 1 per product in every active month.",
         },
     },
     "Run Beyond Equipment Rated Capacity": {
@@ -64,11 +64,11 @@ ACTIVITIES = {
         "capital_cost": 300.0,
         "productivity_increment": [1.0, 1.0, 1.0, 1.0],
         "quality_increment": [0.00, 0.00, 0.00, 0.00],
-        "cost_reduction_increment": [0.0, 1.0, 1.0, 1.0],
+        "cost_reduction_increment": [1.0, 1.0, 1.0, 1.0],
         "effect_lines": {
             "Productivity": "+1 product/month in every active month.",
             "Quality": "No change in any active month.",
-            "Manufacturing Cost": "No change in Active M1, then decreases by 1 per product in each later active month.",
+            "Manufacturing Cost": "Decreases by 1 per product from the activation month and in every later active month.",
         },
     },
     "Statistical Process Control": {
