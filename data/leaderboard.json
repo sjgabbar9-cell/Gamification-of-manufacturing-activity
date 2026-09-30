@@ -24,5 +24,18 @@
     "Productivity": 91.0,
     "Quality %": 81.0,
     "Manufacturing Cost": 23.0
+  },
+  "d4d7100e-970a-4ba5-ad2e-3c13ac0e2db7": {
+    "Session ID": "d4d7100e-970a-4ba5-ad2e-3c13ac0e2db7",
+    "Team Name": "Final Trail_v1",
+    "Team Members": "Pessi",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30T17:27:10.487518",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
