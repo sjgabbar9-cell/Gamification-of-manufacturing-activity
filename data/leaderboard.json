@@ -88,5 +88,20 @@
     "Cumulative Profit": 3172.0000000000014,
     "Capital Budget Remaining": 150.0,
     "Updated At": "2026-09-30 16:45:46.439888"
+  },
+  "c5183190-e3e4-4441-805f-8a514112f141": {
+    "Session ID": "c5183190-e3e4-4441-805f-8a514112f141",
+    "Team Name": "Team 1",
+    "Team Members": "Ronaldo",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Productivity": 80.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 30.0,
+    "Landed Cost": 40.0,
+    "Monthly Profit": 0.0,
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30 16:55:08.077715"
   }
 }
