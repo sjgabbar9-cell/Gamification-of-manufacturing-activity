@@ -261,8 +261,6 @@ def dashboard_page():
         st.markdown(f"<div class='kpi-grid'><div class='kpi'><div class='kl'>Productivity</div><div class='kv'>{h['productivity']:.1f}<span class='ku'>products/month</span></div></div><div class='kpi'><div class='kl'>Quality</div><div class='kv'>{h['quality']:.1%}<span class='ku'>good products</span></div></div><div class='kpi'><div class='kl'>Manufacturing Cost</div><div class='kv'>{h['manufacturing_cost']:.1f}<span class='ku'>cost/product</span></div></div><div class='kpi'><div class='kl'>Landed Cost</div><div class='kv'>{h['landed_cost']:.2f}<span class='ku'>cost/product</span></div></div><div class='kpi'><div class='kl'>Monthly Profit</div><div class='kv'>{h['monthly_profit']:,.1f}<span class='ku'>per month</span></div></div></div>",unsafe_allow_html=True)
     st.subheader("Month-wise Performance Summary");history_table(state)
     st.subheader("Performance Graphs");performance_graph(state)
-    if state["history"]:
-        h=state["history"][-1];st.markdown(f"<div class='diag'><b>Active activity age:</b> {h['ages']}<br><b>Increment applied this month:</b> {h['effects']}</div>",unsafe_allow_html=True)
     st.markdown("<div class='steps'>"+"".join(f"<div class='step {'done' if m<=state['month'] else 'current' if m==state['month']+1 else ''}'>Month {m}</div>" for m in range(1,5))+"</div>",unsafe_allow_html=True)
     if state["month"]<4:
         month=state["month"]+1;used=set(state["selections"].values());available=[name for name,a in ACTIVITIES.items() if name not in used and a["capital_cost"]<=state["capital_budget"]];cols=st.columns(2)
