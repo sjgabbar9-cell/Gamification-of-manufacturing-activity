@@ -37,5 +37,18 @@
     "Productivity": 85.0,
     "Quality %": 75.0,
     "Manufacturing Cost": 28.0
+  },
+  "4bf71998-58cc-46f0-8e88-df0999acc2d8": {
+    "Session ID": "4bf71998-58cc-46f0-8e88-df0999acc2d8",
+    "Team Name": "ssa",
+    "Team Members": "ffsf",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30T17:33:35.562395",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
