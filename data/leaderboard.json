@@ -29,13 +29,13 @@
     "Session ID": "d4d7100e-970a-4ba5-ad2e-3c13ac0e2db7",
     "Team Name": "Final Trail_v1",
     "Team Members": "Pessi",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit": 0.0,
-    "Capital Budget Remaining": 1500.0,
-    "Updated At": "2026-09-30T17:27:10.487518",
-    "Productivity": 80,
-    "Quality %": 75,
-    "Manufacturing Cost": 30
+    "Month": 1,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit": 432.5,
+    "Capital Budget Remaining": 1125.0,
+    "Updated At": "2026-09-30T17:29:50.826253",
+    "Productivity": 85.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 28.0
   }
 }
