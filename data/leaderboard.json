@@ -42,13 +42,13 @@
     "Session ID": "4bf71998-58cc-46f0-8e88-df0999acc2d8",
     "Team Name": "ssa",
     "Team Members": "ffsf",
-    "Month": 1,
-    "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit": 420.00000000000045,
-    "Capital Budget Remaining": 1200.0,
-    "Updated At": "2026-09-30T17:38:30.091966",
-    "Productivity": 80.0,
-    "Quality %": 78.0,
-    "Manufacturing Cost": 30.0
+    "Month": 2,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit": 1051.5000000000005,
+    "Capital Budget Remaining": 900.0,
+    "Updated At": "2026-09-30T17:38:48.003608",
+    "Productivity": 81.0,
+    "Quality %": 81.0,
+    "Manufacturing Cost": 29.0
   }
 }
