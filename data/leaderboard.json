@@ -18,15 +18,15 @@
     "Session ID": "78d96e9a-c224-4960-a5bf-5eaab0a1bac8",
     "Team Name": "Jadh",
     "Team Members": "Sdd",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Productivity": 80.0,
-    "Quality %": 75.0,
+    "Month": 1,
+    "Selected Activity": "Increase Speed of Bottleneck",
+    "Productivity": 81.0,
+    "Quality %": 70.0,
     "Manufacturing Cost": 30.0,
-    "Landed Cost": 40.0,
-    "Monthly Profit": 0.0,
-    "Cumulative Profit": 0.0,
-    "Capital Budget Remaining": 1500.0,
-    "Updated At": "2026-09-30 16:27:01.798349"
+    "Landed Cost": 45.50264550264551,
+    "Monthly Profit": 255.0,
+    "Cumulative Profit": 255.0,
+    "Capital Budget Remaining": 1350.0,
+    "Updated At": "2026-09-30 16:27:22.954639"
   }
 }
