@@ -81,6 +81,30 @@ def history_table(state):
  for m in range(state["month"]+1,5):rows.append({"Period":f"Month {m}","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Monthly Profit":"-","Cumulative Profit":"-"})
  rows.append({"Period":"Cumulative","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Monthly Profit":"-","Cumulative Profit":f"{state['cumulative_profit']:,.1f}"})
  df=pd.DataFrame(rows);st.markdown(df.to_html(index=False,escape=False,classes="summary"),unsafe_allow_html=True)
+def performance_graph(state):
+ # Baseline plus completed months. Future months are intentionally excluded.
+ baseline_profit=80*.75*50-80*30
+ periods=["Baseline"]+[f"Month {h['month']}" for h in state["history"]]
+ monthly_profit=[baseline_profit]+[h["monthly_profit"] for h in state["history"]]
+ cumulative_profit=[0.0]+[h["cumulative_profit"] for h in state["history"]]
+ productivity=[80.0]+[h["productivity"] for h in state["history"]]
+ quality=[75.0]+[h["quality"]*100 for h in state["history"]]
+ manufacturing_cost=[30.0]+[h["manufacturing_cost"] for h in state["history"]]
+
+ fig=go.Figure()
+ fig.add_bar(x=periods,y=monthly_profit,name="Monthly Profit",marker_color="#15803d",text=[f"{v:,.1f}" for v in monthly_profit],textposition="outside")
+ fig.add_scatter(x=periods,y=cumulative_profit,name="Cumulative Profit",mode="lines+markers+text",text=[f"{v:,.1f}" for v in cumulative_profit],textposition="top center",line=dict(color="#f59e0b",width=3),marker=dict(size=8),yaxis="y")
+ fig.update_layout(title="Monthly and Cumulative Profit Trend",xaxis_title="Period",yaxis_title="Profit",legend=dict(orientation="h",yanchor="bottom",y=1.03,xanchor="left",x=0),margin=dict(l=20,r=20,t=85,b=20),height=430,hovermode="x unified")
+ st.plotly_chart(fig,use_container_width=True)
+
+ # Three operational KPI trends are shown separately so their units remain clear.
+ kpi=go.Figure()
+ kpi.add_scatter(x=periods,y=productivity,name="Productivity (products/month)",mode="lines+markers",line=dict(color="#2563eb",width=3))
+ kpi.add_scatter(x=periods,y=quality,name="Quality (%)",mode="lines+markers",line=dict(color="#16a34a",width=3))
+ kpi.add_scatter(x=periods,y=manufacturing_cost,name="Manufacturing Cost (cost/product)",mode="lines+markers",line=dict(color="#dc2626",width=3))
+ kpi.update_layout(title="Operational KPI Trend",xaxis_title="Period",yaxis_title="KPI Value",legend=dict(orientation="h",yanchor="bottom",y=1.03,xanchor="left",x=0),margin=dict(l=20,r=20,t=85,b=20),height=430,hovermode="x unified")
+ st.plotly_chart(kpi,use_container_width=True)
+
 def activity_card(name,a,off):
  cls="activity unavailable" if off else "activity";l=a["lines"]
  return f"<div class='{cls}'><div style='font-size:2rem'>{a['icon']}</div><h3>{name}</h3><table class='effect'><tr><td>Productivity<br><small>products/month</small></td><td>{l[0]}</td></tr><tr><td>Quality<br><small>percentage points</small></td><td>{l[1]}</td></tr><tr><td>Manufacturing Cost<br><small>cost/product</small></td><td>{l[2]}</td></tr></table><div class='capital'>Capital Cost: {a['capital_cost']:,.0f}</div></div>"
@@ -115,6 +139,7 @@ def dashboard():
   h=state["history"][-1]
   st.markdown(f"<div class='kpi-grid'><div class='kpi'><div class='kl'>Productivity</div><div class='kv'>{h['productivity']:.1f}<span class='ku'>products/month</span></div></div><div class='kpi'><div class='kl'>Quality</div><div class='kv'>{h['quality']:.1%}<span class='ku'>good products</span></div></div><div class='kpi'><div class='kl'>Manufacturing Cost</div><div class='kv'>{h['manufacturing_cost']:.1f}<span class='ku'>cost/product</span></div></div><div class='kpi'><div class='kl'>Landed Cost</div><div class='kv'>{h['landed_cost']:.2f}<span class='ku'>cost/good product</span></div></div><div class='kpi'><div class='kl'>Monthly Profit</div><div class='kv'>{h['monthly_profit']:,.1f}<span class='ku'>per month</span></div></div></div>",unsafe_allow_html=True)
  st.subheader("Month-wise Performance Summary");history_table(state)
+ st.subheader("Performance Graphs");performance_graph(state)
  if state["history"]:
   h=state["history"][-1];st.markdown(f"<div class='diag'><b>Active activity age:</b> {h['ages']}<br><b>Increment applied this month:</b> {h['effects']}</div>",unsafe_allow_html=True)
  st.markdown("<div class='steps'>"+"".join(f"<div class='step {'done' if m<=state['month'] else 'current' if m==state['month']+1 else ''}'>Month {m}</div>" for m in range(1,5))+"</div>",unsafe_allow_html=True)
