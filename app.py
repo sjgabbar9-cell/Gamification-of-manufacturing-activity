@@ -405,6 +405,7 @@ st.markdown(
 .hero{padding:1.8rem 2rem;border-radius:25px;background:linear-gradient(125deg,#103d27,#166534 52%,#16a34a);color:white;box-shadow:0 18px 48px rgba(20,83,45,.2);margin-bottom:1rem}.hero h1{margin:0}.hero p{margin:.4rem 0 0;opacity:.92}
 .baseline{padding:1rem 1.15rem;border-radius:16px;background:#ecfeff;border:1px solid #67e8f9;margin:.8rem 0}.insight{padding:.9rem 1rem;border-radius:14px;background:#eff6ff;border:1px solid #93c5fd;margin:.7rem 0}
 .actionbar{display:flex;gap:8px;align-items:center;justify-content:center;margin:1rem 0 .8rem;padding:.8rem;border-radius:15px;background:white;border:1px solid #d9e8de}.step{min-width:125px;text-align:center;padding:.65rem .75rem;border-radius:12px;background:#e2e8f0;color:#475569;font-weight:750}.step.done{background:#bbf7d0;color:#14532d}.step.current{background:#15803d;color:white;box-shadow:0 6px 16px rgba(21,128,61,.25)}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:.8rem 0 1rem}.kpi-card{min-width:0;background:#f4fbf6;border:1px solid #cfe3d4;border-radius:14px;padding:.8rem .85rem;overflow:hidden}.kpi-label{font-size:.88rem;line-height:1.2;color:#173d2b;margin-bottom:.45rem;white-space:normal}.kpi-value{font-size:clamp(1.25rem,2.15vw,2.05rem);line-height:1.08;font-weight:500;color:#071b12;white-space:normal;overflow-wrap:anywhere;word-break:break-word}.kpi-unit{display:block;font-size:.72rem;line-height:1.2;color:#496557;margin-top:.28rem;font-weight:500}@media(max-width:1050px){.kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:680px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi-value{font-size:1.35rem}}@media(max-width:420px){.kpi-grid{grid-template-columns:1fr}}
 .activity{background:white;border:1px solid #d9e8de;border-radius:18px;padding:1rem;box-shadow:0 8px 22px rgba(20,83,45,.07);height:100%}.activity.unavailable{opacity:.47;filter:grayscale(.7)}.activity h3{font-size:1.04rem;margin:.15rem 0 .45rem}.ico{font-size:2rem}.capital{margin-top:.7rem;padding:.5rem .65rem;border-radius:9px;background:#f0fdf4;color:#166534;font-weight:800}
 .effect-summary{width:100%;border-collapse:collapse;margin-top:.55rem;font-size:.82rem}.effect-summary td{padding:.55rem .5rem;border-bottom:1px solid #dbe5df;vertical-align:top}.effect-summary td:first-child{width:31%;font-weight:800;color:#14532d;background:#f8fafc}.effect-summary tr:last-child td{border-bottom:0}
 .process-wrap{background:white;border:1px solid #b9d8c1;border-radius:22px;padding:1rem;overflow-x:auto}.process-line{min-width:1000px;display:flex;align-items:center;gap:10px;position:relative;padding:20px 10px 50px}.unit{width:145px;min-height:80px;border:2px solid #15803d;border-radius:13px;background:#eefbf1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-weight:750}.unit span{font-size:1.8rem}.arrow{width:48px;height:12px;background:#15803d;position:relative}.arrow:after{content:"";position:absolute;right:-13px;top:-7px;border-left:14px solid #15803d;border-top:13px solid transparent;border-bottom:13px solid transparent}.belt{position:absolute;left:15px;right:15px;bottom:18px;height:10px;border-radius:6px;background:repeating-linear-gradient(90deg,#14532d 0 24px,#86efac 24px 38px);animation:belt .75s linear infinite}.tile{position:absolute;bottom:29px;width:34px;height:20px;background:#f59e0b;border:2px solid #9a5a06;border-radius:3px;animation:move 8s linear infinite}.tile.t2{animation-delay:-2.7s}.tile.t3{animation-delay:-5.4s}.flow-label{position:absolute;bottom:0;left:15px;color:#166534;font-size:.78rem;font-weight:700}@keyframes belt{to{background-position:38px 0}}@keyframes move{0%{left:2%}100%{left:95%}}
@@ -590,12 +591,16 @@ def dashboard_page():
         )
     else:
         latest = state["history"][-1]
-        metric_1, metric_2, metric_3, metric_4, metric_5 = st.columns(5)
-        metric_1.metric("Productivity", f"{latest['productivity']:.1f} products/month")
-        metric_2.metric("Quality", f"{latest['quality']:.1%}")
-        metric_3.metric("Manufacturing Cost", f"{latest['manufacturing_cost']:.1f}/product")
-        metric_4.metric("Landed Cost", f"{latest['landed_cost']:.2f}/good product")
-        metric_5.metric("Monthly Profit", f"{latest['monthly_profit']:,.1f}")
+        st.markdown(
+            f"""<div class='kpi-grid'>
+            <div class='kpi-card'><div class='kpi-label'>Productivity</div><div class='kpi-value'>{latest['productivity']:.1f}<span class='kpi-unit'>products/month</span></div></div>
+            <div class='kpi-card'><div class='kpi-label'>Quality</div><div class='kpi-value'>{latest['quality']:.1%}<span class='kpi-unit'>good products</span></div></div>
+            <div class='kpi-card'><div class='kpi-label'>Manufacturing Cost</div><div class='kpi-value'>{latest['manufacturing_cost']:.1f}<span class='kpi-unit'>cost/product</span></div></div>
+            <div class='kpi-card'><div class='kpi-label'>Landed Cost</div><div class='kpi-value'>{latest['landed_cost']:.2f}<span class='kpi-unit'>cost/good product</span></div></div>
+            <div class='kpi-card'><div class='kpi-label'>Monthly Profit</div><div class='kpi-value'>{latest['monthly_profit']:,.1f}<span class='kpi-unit'>per month</span></div></div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
         st.markdown(
             f"<div class='insight'><b>Month {state['month']} diagnosis:</b> "
             f"{latest['diagnosis']}<br><b>Active activity age:</b> "
