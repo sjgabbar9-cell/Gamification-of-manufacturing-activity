@@ -11,5 +11,18 @@
     "Productivity": 90.0,
     "Quality %": 85.00000000000001,
     "Manufacturing Cost": 24.0
+  },
+  "6540a47a-b2a3-4231-b12e-5240446868be": {
+    "Session ID": "6540a47a-b2a3-4231-b12e-5240446868be",
+    "Team Name": "a,sa",
+    "Team Members": "dzda",
+    "Month": 1,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit": 432.5,
+    "Capital Budget Remaining": 1125.0,
+    "Updated At": "2026-09-30T17:25:04.000018",
+    "Productivity": 85.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 28.0
   }
 }
