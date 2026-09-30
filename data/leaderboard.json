@@ -116,5 +116,18 @@
     "Productivity": 92.0,
     "Quality %": 81.0,
     "Manufacturing Cost": 25.0
+  },
+  "a7cd7c19-3c1c-454f-bb4c-2789bd431b4d": {
+    "Session ID": "a7cd7c19-3c1c-454f-bb4c-2789bd431b4d",
+    "Team Name": "Team",
+    "Team Members": "Ronaldo again",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30T17:00:13.507682",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
