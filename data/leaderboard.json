@@ -28,5 +28,20 @@
     "Cumulative Profit": 255.0,
     "Capital Budget Remaining": 1350.0,
     "Updated At": "2026-09-30 16:27:22.954639"
+  },
+  "681d3335-0d1a-4a52-8480-43c8d2fedbfc": {
+    "Session ID": "681d3335-0d1a-4a52-8480-43c8d2fedbfc",
+    "Team Name": "Test",
+    "Team Members": "Chinmoy",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Productivity": 80.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 30.0,
+    "Landed Cost": 40.0,
+    "Monthly Profit": 0.0,
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30 16:31:11.090392"
   }
 }
