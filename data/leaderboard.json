@@ -58,5 +58,20 @@
     "Cumulative Profit": 0.0,
     "Capital Budget Remaining": 1500.0,
     "Updated At": "2026-09-30 16:32:43.321445"
+  },
+  "329a764b-da38-4e5b-9d2d-ee2af074b011": {
+    "Session ID": "329a764b-da38-4e5b-9d2d-ee2af074b011",
+    "Team Name": "aass",
+    "Team Members": "ss",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Productivity": 80.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 30.0,
+    "Landed Cost": 40.0,
+    "Monthly Profit": 0.0,
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-09-30 16:38:06.534462"
   }
 }
