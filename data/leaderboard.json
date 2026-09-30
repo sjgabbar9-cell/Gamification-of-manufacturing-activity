@@ -42,13 +42,13 @@
     "Session ID": "4bf71998-58cc-46f0-8e88-df0999acc2d8",
     "Team Name": "ssa",
     "Team Members": "ffsf",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit": 0.0,
-    "Capital Budget Remaining": 1500.0,
-    "Updated At": "2026-09-30T17:33:35.562395",
-    "Productivity": 80,
-    "Quality %": 75,
-    "Manufacturing Cost": 30
+    "Month": 1,
+    "Selected Activity": "Statistical Process Control",
+    "Cumulative Profit": 420.00000000000045,
+    "Capital Budget Remaining": 1200.0,
+    "Updated At": "2026-09-30T17:38:30.091966",
+    "Productivity": 80.0,
+    "Quality %": 78.0,
+    "Manufacturing Cost": 30.0
   }
 }
