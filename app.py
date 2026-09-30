@@ -1,702 +1,132 @@
-import base64
-import json
-import uuid
+import base64, json, uuid
 from datetime import datetime
-
 import pandas as pd
 import plotly.graph_objects as go
 import requests
 import streamlit as st
 
-st.set_page_config(
-    page_title="Four-Month Profit Optimization Challenge",
-    page_icon="🏆",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+st.set_page_config(page_title="Four-Month Profit Optimization Challenge",page_icon="🏆",layout="wide",initial_sidebar_state="expanded")
 
-# =============================================================================
-# BASELINE AND ACTIVITY MODEL
-# Incremental values are applied once in the relevant ACTIVE month.
-# Example: [10, 0, 0, 0] means +10 products/month when the activity is activated,
-# then no further increase; the improved KPI is carried forward automatically.
-# =============================================================================
-BASELINE = {
-    "productivity": 80.0,                 # products/month
-    "quality": 0.75,                      # proportion
-    "manufacturing_cost": 30.0,           # cost/product
-    "selling_price": 50.0,                # price/product
-    "capital_budget": 1500.0,
-}
+BASELINE={"productivity":80.0,"quality":.75,"manufacturing_cost":30.0,"selling_price":50.0,"capital_budget":1500.0}
+ACTIVITIES={
+"Parallel Line Installation":{"icon":"🏭","capital_cost":750.0,"p":[5,0,0,0],"q":[0,0,0,0],"c":[1,0,0,0],"lines":["+5 products/month in activation month; improved level remains.","No change.","-1 cost/product in activation month; reduced level remains."]},
+"Changeover Time Optimization (SMED)":{"icon":"⏱️","capital_cost":375.0,"p":[5,1,1,1],"q":[0,0,0,0],"c":[2,1,1,1],"lines":["+5 products/month in activation month, then +1 in each later active month.","No change.","-2 cost/product in activation month, then -1 in each later active month."]},
+"Increase Speed of Bottleneck":{"icon":"⚙️","capital_cost":150.0,"p":[1,0,0,0],"q":[-.05,-.05,-.05,-.05],"c":[0,0,0,0],"lines":["+1 product/month in activation month; no later increment.","-5 percentage points in every active month.","No change."]},
+"Preventive Maintenance (CLTI)":{"icon":"🔧","capital_cost":300.0,"p":[1,1,1,1],"q":[0,0,0,0],"c":[0,1,1,1],"lines":["+1 product/month in every active month.","No change.","No change in Active M1, then -1 cost/product in each later active month."]},
+"Statistical Process Control":{"icon":"📊","capital_cost":300.0,"p":[0,0,0,0],"q":[.03,.03,.03,.03],"c":[0,0,0,0],"lines":["No change.","+3 percentage points in every active month.","No change."]},
+"Operator Training & Performance Management":{"icon":"👷","capital_cost":375.0,"p":[0,1,1,1],"q":[0,.01,.01,.01],"c":[0,1,1,1],"lines":["No change in Active M1, then +1 product/month in each later active month.","No change in Active M1, then +1 percentage point in each later active month.","No change in Active M1, then -1 cost/product in each later active month."]}}
+LEADERBOARD_FILE="data/leaderboard.json"
 
-ACTIVITIES = {
-    "Parallel Line Installation": {
-        "icon": "🏭",
-        "capital_cost": 750.0,
-        "productivity_increment": [5.0, 0.0, 0.0, 0.0],
-        "quality_increment": [0.00, 0.00, 0.00, 0.00],
-        "cost_reduction_increment": [1.0, 0.0, 0.0, 0.0],
-        "effect_lines": {
-            "Productivity": "Increases by 5 products/month in the activation month; no further increment is added, so the improved level remains constant.",
-            "Quality": "No change in the activation month or later active months.",
-            "Manufacturing Cost": "Decreases by 1 per product in the activation month; no further reduction is added, so the reduced level remains constant.",
-        },
-    },
-    "Changeover Time Optimization (SMED)": {
-        "icon": "⏱️",
-        "capital_cost": 375.0,
-        "productivity_increment": [5.0, 1.0, 1.0, 1.0],
-        "quality_increment": [0.00, 0.00, 0.00, 0.00],
-        "cost_reduction_increment": [2.0, 1.0, 1.0, 1.0],
-        "effect_lines": {
-            "Productivity": "Increases by 5 products/month in the activation month, then by 1 product/month in each subsequent active month.",
-            "Quality": "No change in the activation month or later active months.",
-            "Manufacturing Cost": "Decreases by 2 per product in the activation month, then by 1 per product in each subsequent active month.",
-        },
-    },
-    "Increase Speed of Bottleneck": {
-        "icon": "⚙️",
-        "capital_cost": 150.0,
-        "productivity_increment": [1.0, 0.0, 0.0, 0.0],
-        "quality_increment": [-0.05, -0.05, -0.05, -0.05],
-        "cost_reduction_increment": [0.0, 0.0, 0.0, 0.0],
-        "effect_lines": {
-            "Productivity": "Increases by 1 product/month in the activation month; no further productivity increment is added.",
-            "Quality": "Decreases by 5 percentage points in every active month, representing the continuing quality risk of sustained high-speed operation.",
-            "Manufacturing Cost": "No manufacturing-cost reduction is achieved in any active month.",
-        },
-    },
-    "Preventive Maintenance (CLTI)": {
-        "icon": "🔧",
-        "capital_cost": 300.0,
-        "productivity_increment": [1.0, 1.0, 1.0, 1.0],
-        "quality_increment": [0.00, 0.00, 0.00, 0.00],
-        "cost_reduction_increment": [0.0, 1.0, 1.0, 1.0],
-        "effect_lines": {
-            "Productivity": "Increases by 1 product/month in each active month, giving a total increase of 4 products/month by Active Month 4.",
-            "Quality": "No change in any active month.",
-            "Manufacturing Cost": "No change in Active Month 1, then decreases by 1 per product in each subsequent active month.",
-        },
-    },
-    "Statistical Process Control": {
-        "icon": "📊",
-        "capital_cost": 300.0,
-        "productivity_increment": [0.0, 0.0, 0.0, 0.0],
-        "quality_increment": [0.03, 0.03, 0.03, 0.03],
-        "cost_reduction_increment": [0.0, 0.0, 0.0, 0.0],
-        "effect_lines": {
-            "Productivity": "No change in any active month.",
-            "Quality": "Increases by 3 percentage points in each active month, giving a total increase of 12 percentage points by Active Month 4.",
-            "Manufacturing Cost": "No change in any active month.",
-        },
-    },
-    "Operator Training & Performance Management": {
-        "icon": "👷",
-        "capital_cost": 375.0,
-        "productivity_increment": [0.0, 1.0, 1.0, 1.0],
-        "quality_increment": [0.00, 0.01, 0.01, 0.01],
-        "cost_reduction_increment": [0.0, 1.0, 1.0, 1.0],
-        "effect_lines": {
-            "Productivity": "No change in Active Month 1, then increases by 1 product/month in each subsequent active month.",
-            "Quality": "No change in Active Month 1, then increases by 1 percentage point in each subsequent active month.",
-            "Manufacturing Cost": "No change in Active Month 1, then decreases by 1 per product in each subsequent active month.",
-        },
-    },
-}
+st.markdown("""<style>
+.stApp{background:#f5fbf7}.block-container{max-width:1380px;padding-top:1rem}.hero{padding:1.5rem 1.8rem;border-radius:22px;background:linear-gradient(120deg,#123d29,#15803d);color:white;margin-bottom:1rem}.hero h1{margin:0}.hero p{margin:.4rem 0 0}.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:1rem 0}.kpi{min-width:0;background:#f1faf4;border:1px solid #cde2d2;border-radius:18px;padding:1rem}.kl{font-size:.9rem;color:#234535}.kv{font-size:clamp(1.25rem,2.1vw,2.05rem);line-height:1.05;margin-top:.5rem;overflow-wrap:anywhere}.ku{display:block;font-size:.72rem;color:#526b5e;margin-top:.35rem}.summary{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden;margin:1rem 0}.summary th{background:#166534;color:white;padding:.65rem;text-align:center}.summary td{border:1px solid #d8e5dc;padding:.58rem;text-align:center}.summary td:first-child{font-weight:750;text-align:left}.summary tr:last-child td{background:#ecfdf5;font-weight:800}.diag{padding:1rem;border:1px solid #93c5fd;background:#eff6ff;border-radius:16px;line-height:1.65}.steps{display:flex;gap:8px;justify-content:center;margin:1rem 0}.step{padding:.7rem 1.2rem;border-radius:12px;background:#e2e8f0;font-weight:700}.done{background:#bbf7d0}.current{background:#15803d;color:white}.activity{background:white;border:1px solid #dae7de;border-radius:18px;padding:1rem;margin-bottom:12px}.unavailable{opacity:.45}.activity h3{margin:.2rem 0}.effect{width:100%;border-collapse:collapse;font-size:.83rem}.effect td{padding:.55rem;border-bottom:1px solid #e1e8e3;vertical-align:top}.effect td:first-child{width:32%;font-weight:750;color:#14532d;background:#f8fafc}.capital{padding:.5rem;background:#ecfdf5;color:#166534;font-weight:800;border-radius:9px;margin-top:.6rem}@media(max-width:950px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.steps{flex-wrap:wrap}}
+</style>""",unsafe_allow_html=True)
 
-# =============================================================================
-# SHARED LEADERBOARD CONFIGURATION
-# All sessions are stored in one pre-created JSON object keyed by Session ID.
-# Updates use optimistic concurrency and retry after a GitHub SHA conflict.
-# =============================================================================
-LEADERBOARD_FILE = "data/leaderboard.json"
+def github_ok():return all(str(st.secrets.get(k,"")).strip() for k in ["GITHUB_TOKEN","GITHUB_OWNER","GITHUB_REPO"])
+def gh_headers():return {"Authorization":f"Bearer {st.secrets['GITHUB_TOKEN']}","Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28","Cache-Control":"no-cache"}
+def gh_url():return f"https://api.github.com/repos/{st.secrets['GITHUB_OWNER']}/{st.secrets['GITHUB_REPO']}/contents/{LEADERBOARD_FILE}"
+def branch():return st.secrets.get("GITHUB_BRANCH","main")
+def read_board():
+ r=requests.get(gh_url(),headers=gh_headers(),params={"ref":branch(),"_":datetime.now().timestamp()},timeout=30)
+ if r.status_code==404:return {},None
+ r.raise_for_status();x=r.json();return json.loads(base64.b64decode(x["content"]).decode() or "{}"),x["sha"]
+def save_shared(rec):
+ sid=str(rec["Session ID"]);local=st.session_state.get("local_players",{});local[sid]=rec;st.session_state.local_players=local
+ if not github_ok():return
+ for _ in range(8):
+  rows,sha=read_board();rows[sid]=rec
+  body={"message":f"Update leaderboard {rec['Team Name']}","content":base64.b64encode(json.dumps(rows,indent=2).encode()).decode(),"branch":branch()}
+  if sha:body["sha"]=sha
+  r=requests.put(gh_url(),headers=gh_headers(),json=body,timeout=30)
+  if r.status_code in (200,201):return
+  if r.status_code not in (409,422):r.raise_for_status()
+ raise RuntimeError("Leaderboard busy. Please retry.")
+def all_players():
+ rows={}
+ if github_ok():rows,_=read_board()
+ for k,v in st.session_state.get("local_players",{}).items():rows[k]=v
+ return list(rows.values())
 
+def initial_state():return {"month":0,"capital_budget":1500.0,"selections":{},"productivity":80.0,"quality":.75,"manufacturing_cost":30.0,"cumulative_profit":0.0,"history":[]}
+def calc(state,month,new=None):
+ p,q,c=state["productivity"],state["quality"],state["manufacturing_cost"];active=dict(state["selections"])
+ if new:active[month]=new
+ ages=[];effects=[]
+ for activated,name in sorted(active.items()):
+  i=month-activated;a=ACTIVITIES[name];dp,dq,dc=a["p"][i],a["q"][i],a["c"][i];p+=dp;q+=dq;c-=dc
+  ages.append(f"{name}: Active M{i+1}");effects.append(f"{name}: productivity {dp:+.1f} products/month, quality {dq*100:+.1f} pp, cost {-dc:+.1f}/product")
+ q=max(0,min(1,q));c=max(0,c);cap=ACTIVITIES[new]["capital_cost"] if new else 0;good=p*q;landed=(p*c+cap)/good if good else 0;profit=good*50-p*c-cap
+ return {"month":month,"productivity":p,"quality":q,"manufacturing_cost":c,"capital_cost":cap,"landed_cost":landed,"monthly_profit":profit,"ages":" | ".join(ages),"effects":" | ".join(effects)}
+def record(state,label):
+ latest=state["history"][-1] if state["history"] else None
+ return {"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":state["month"],"Selected Activity":label,"Cumulative Profit":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Updated At":datetime.now().isoformat(timespec="microseconds"),"Productivity":latest["productivity"] if latest else 80,"Quality %":latest["quality"]*100 if latest else 75,"Manufacturing Cost":latest["manufacturing_cost"] if latest else 30}
+def run_month(no_new=False):
+ state=st.session_state.state.copy();state["history"]=list(state["history"]);state["selections"]=dict(state["selections"]);m=state["month"]+1;sel=None if no_new else st.session_state.get("selected_activity")
+ if not sel and not no_new:st.error("Select one activity.");return
+ cap=ACTIVITIES[sel]["capital_cost"] if sel else 0
+ if cap>state["capital_budget"]:st.error("Insufficient capital budget.");return
+ x=calc(state,m,sel);x["selected"]=sel or "No New Activity - Existing Effects Continue";state["month"]=m;state["capital_budget"]-=cap
+ if sel:state["selections"][m]=sel
+ state["productivity"],state["quality"],state["manufacturing_cost"]=x["productivity"],x["quality"],x["manufacturing_cost"];state["cumulative_profit"]+=x["monthly_profit"];x["cumulative_profit"]=state["cumulative_profit"];state["history"].append(x);st.session_state.state=state
+ try:save_shared(record(state,x["selected"]))
+ except Exception as e:st.warning(f"Leaderboard update failed: {e}")
+ st.rerun()
+def continue_existing():run_month(True)
 
-def github_configured():
-    return all(
-        str(st.secrets.get(key, "")).strip()
-        for key in ["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO"]
-    )
+def hero():st.markdown("<div class='hero'><h1>🏆 Four-Month Profit Optimization Challenge</h1><p>Effects are applied by active month and remain accumulated.</p></div>",unsafe_allow_html=True)
+def history_table(state):
+ base_profit=80*.75*50-80*30
+ rows=[{"Period":"Baseline","Productivity":"80.0 products/month","Quality":"75.0%","Manufacturing Cost":"30.0 /product","Landed Cost":"40.00 /good product","Monthly Profit":f"{base_profit:,.1f}","Cumulative Profit":"0.0"}]
+ for h in state["history"]:
+  rows.append({"Period":f"Month {h['month']}","Productivity":f"{h['productivity']:.1f} products/month","Quality":f"{h['quality']:.1%}","Manufacturing Cost":f"{h['manufacturing_cost']:.1f} /product","Landed Cost":f"{h['landed_cost']:.2f} /good product","Monthly Profit":f"{h['monthly_profit']:,.1f}","Cumulative Profit":f"{h['cumulative_profit']:,.1f}"})
+ for m in range(state["month"]+1,5):rows.append({"Period":f"Month {m}","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Monthly Profit":"-","Cumulative Profit":"-"})
+ rows.append({"Period":"Cumulative","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Monthly Profit":"-","Cumulative Profit":f"{state['cumulative_profit']:,.1f}"})
+ df=pd.DataFrame(rows);st.markdown(df.to_html(index=False,escape=False,classes="summary"),unsafe_allow_html=True)
+def activity_card(name,a,off):
+ cls="activity unavailable" if off else "activity";l=a["lines"]
+ return f"<div class='{cls}'><div style='font-size:2rem'>{a['icon']}</div><h3>{name}</h3><table class='effect'><tr><td>Productivity<br><small>products/month</small></td><td>{l[0]}</td></tr><tr><td>Quality<br><small>percentage points</small></td><td>{l[1]}</td></tr><tr><td>Manufacturing Cost<br><small>cost/product</small></td><td>{l[2]}</td></tr></table><div class='capital'>Capital Cost: {a['capital_cost']:,.0f}</div></div>"
+def leaderboard():
+ c1,c2=st.columns([5,1]);c1.subheader("🏅 Live Shared Leaderboard")
+ if c2.button("Refresh ↻",use_container_width=True):st.rerun()
+ if not github_ok():st.error("Shared storage not connected. Configure GitHub secrets.")
+ try:rows=all_players()
+ except Exception as e:st.warning(f"Leaderboard refresh failed: {e}");rows=list(st.session_state.get("local_players",{}).values())
+ if rows:
+  df=pd.DataFrame(rows);df["Cumulative Profit"]=pd.to_numeric(df["Cumulative Profit"],errors="coerce").fillna(0);df=df.sort_values(["Cumulative Profit","Month"],ascending=[False,False]).reset_index(drop=True);df.insert(0,"Rank",range(1,len(df)+1));st.dataframe(df[["Rank","Team Name","Team Members","Month","Selected Activity","Cumulative Profit","Capital Budget Remaining"]],use_container_width=True,hide_index=True)
+ else:st.info("Registered players will appear here.")
 
-
-def github_headers():
-    return {
-        "Authorization": f"Bearer {st.secrets['GITHUB_TOKEN']}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-        "Cache-Control": "no-cache",
-    }
-
-
-def github_url(path):
-    return (
-        f"https://api.github.com/repos/{st.secrets['GITHUB_OWNER']}/"
-        f"{st.secrets['GITHUB_REPO']}/contents/{path}"
-    )
-
-
-def branch_name():
-    return st.secrets.get("GITHUB_BRANCH", "main")
-
-
-def read_shared_leaderboard():
-    response = requests.get(
-        github_url(LEADERBOARD_FILE),
-        headers=github_headers(),
-        params={"ref": branch_name(), "_": datetime.now().timestamp()},
-        timeout=30,
-    )
-    if response.status_code == 404:
-        raise RuntimeError(
-            "data/leaderboard.json is missing in GitHub. Upload the supplied "
-            "leaderboard.json file inside the repository data folder."
-        )
-    response.raise_for_status()
-    payload = response.json()
-    raw = base64.b64decode(payload["content"]).decode("utf-8").strip()
-    records = json.loads(raw or "{}")
-    if not isinstance(records, dict):
-        raise RuntimeError("data/leaderboard.json must contain a JSON object: {}")
-    return records, payload["sha"]
-
-
-def write_shared_leaderboard(records, sha, message):
-    body = {
-        "message": message,
-        "content": base64.b64encode(
-            json.dumps(records, ensure_ascii=False, indent=2).encode("utf-8")
-        ).decode("ascii"),
-        "branch": branch_name(),
-        "sha": sha,
-    }
-    return requests.put(
-        github_url(LEADERBOARD_FILE),
-        headers=github_headers(),
-        json=body,
-        timeout=30,
-    )
-
-
-def save_player(record):
-    session_id = str(record["Session ID"])
-    local = st.session_state.get("local_players", {})
-    local[session_id] = record
-    st.session_state.local_players = local
-
-    if not github_configured():
-        raise RuntimeError(
-            "GitHub storage is not configured. Add GITHUB_TOKEN, GITHUB_OWNER, "
-            "GITHUB_REPO, and GITHUB_BRANCH to Streamlit secrets."
-        )
-
-    # Read the newest shared object before every write, merge this session only,
-    # and retry the full read-merge-write cycle if another player wrote first.
-    for attempt in range(8):
-        records, sha = read_shared_leaderboard()
-        records[session_id] = record
-        response = write_shared_leaderboard(
-            records,
-            sha,
-            f"Update shared leaderboard: {record['Team Name']}",
-        )
-        if response.status_code in (200, 201):
-            return
-        if response.status_code in (409, 422):
-            continue
-        response.raise_for_status()
-    raise RuntimeError(
-        "Leaderboard was busy after 8 update attempts. Please press the month button once more."
-    )
-
-
-def shared_players():
-    records = {}
-    if github_configured():
-        records, _ = read_shared_leaderboard()
-
-    # Merge current browser state so the active player appears immediately even
-    # while GitHub propagation completes. Session ID keeps all players separate.
-    for session_id, local_record in st.session_state.get("local_players", {}).items():
-        shared_record = records.get(session_id)
-        if not shared_record or str(local_record.get("Updated At", "")) >= str(
-            shared_record.get("Updated At", "")
-        ):
-            records[session_id] = local_record
-    return list(records.values())
-
-# =============================================================================
-# SIMULATION ENGINE
-# =============================================================================
-def initial_state():
-    return {
-        "month": 0,
-        "capital_budget": BASELINE["capital_budget"],
-        "selections": {},
-        "productivity": BASELINE["productivity"],
-        "quality": BASELINE["quality"],
-        "manufacturing_cost": BASELINE["manufacturing_cost"],
-        "cumulative_profit": 0.0,
-        "history": [],
-    }
-
-
-def calculate_month(state, current_month, new_activity=None):
-    """
-    Stateful incremental calculation.
-
-    The calculation starts from the previous month's KPI values, not Month 0.
-    Every active activity contributes only the increment corresponding to its
-    current ACTIVE month. Example for SMED selected in calendar Month 2:
-      calendar Month 2 -> active M1 -> +10 products/month
-      calendar Month 3 -> active M2 -> +0
-      calendar Month 4 -> active M3 -> +0
-    The +10 remains because Month 3 starts from Month 2's ending productivity.
-    """
-    productivity = state["productivity"]
-    quality = state["quality"]
-    manufacturing_cost = state["manufacturing_cost"]
-
-    active_selections = dict(state["selections"])
-    if new_activity:
-        active_selections[current_month] = new_activity
-
-    applied_effects = []
-    active_stages = []
-    for activation_month, activity_name in sorted(active_selections.items()):
-        active_month_index = current_month - activation_month
-        activity = ACTIVITIES[activity_name]
-
-        productivity_change = activity["productivity_increment"][active_month_index]
-        quality_change = activity["quality_increment"][active_month_index]
-        cost_reduction = activity["cost_reduction_increment"][active_month_index]
-
-        productivity += productivity_change
-        quality += quality_change
-        manufacturing_cost -= cost_reduction
-
-        active_stages.append(f"{activity_name}: Active M{active_month_index + 1}")
-        applied_effects.append(
-            f"{activity_name} | productivity {productivity_change:+.1f} products/month, "
-            f"quality {quality_change * 100:+.1f} pp, "
-            f"cost {(-cost_reduction):+.1f}/product"
-        )
-
-    quality = max(0.0, min(1.0, quality))
-    manufacturing_cost = max(0.0, manufacturing_cost)
-    capital_cost = ACTIVITIES[new_activity]["capital_cost"] if new_activity else 0.0
-    good_products = productivity * quality
-    landed_cost = (
-        (productivity * manufacturing_cost + capital_cost) / good_products
-        if good_products
-        else 0.0
-    )
-    monthly_profit = (
-        good_products * BASELINE["selling_price"]
-        - productivity * manufacturing_cost
-        - capital_cost
-    )
-
-    return {
-        "productivity": productivity,
-        "quality": quality,
-        "manufacturing_cost": manufacturing_cost,
-        "capital_cost": capital_cost,
-        "landed_cost": landed_cost,
-        "monthly_profit": monthly_profit,
-        "active_stages": " | ".join(active_stages) if active_stages else "Baseline only",
-        "applied_effects": " | ".join(applied_effects) if applied_effects else "No change",
-    }
-
-
-def diagnosis(metrics, previous=None):
-    parts = [
-        f"Productivity is {'above' if metrics['productivity'] > 80 else 'at' if metrics['productivity'] == 80 else 'below'} the Month 0 baseline.",
-        f"Quality is {'above' if metrics['quality'] > .75 else 'at' if metrics['quality'] == .75 else 'below'} the 75% baseline.",
-        f"Manufacturing cost is {'below' if metrics['manufacturing_cost'] < 30 else 'at' if metrics['manufacturing_cost'] == 30 else 'above'} the baseline of 30 per product.",
-    ]
-    if previous:
-        difference = metrics["monthly_profit"] - previous["monthly_profit"]
-        parts.append(
-            f"Monthly profit {'increased' if difference >= 0 else 'decreased'} "
-            f"by {abs(difference):.1f} versus the previous month."
-        )
-    return " ".join(parts)
-
-
-def player_record(state, selected_activity="Registered - Not Started"):
-    latest = state["history"][-1] if state["history"] else None
-    return {
-        "Session ID": st.session_state.session_id,
-        "Team Name": st.session_state.team_name,
-        "Team Members": st.session_state.team_members,
-        "Month": state["month"],
-        "Selected Activity": selected_activity,
-        "Productivity": latest["productivity"] if latest else BASELINE["productivity"],
-        "Quality %": (latest["quality"] if latest else BASELINE["quality"]) * 100,
-        "Manufacturing Cost": latest["manufacturing_cost"] if latest else BASELINE["manufacturing_cost"],
-        "Landed Cost": latest["landed_cost"] if latest else BASELINE["manufacturing_cost"] / BASELINE["quality"],
-        "Monthly Profit": latest["monthly_profit"] if latest else 0.0,
-        "Cumulative Profit": state["cumulative_profit"],
-        "Capital Budget Remaining": state["capital_budget"],
-        "Updated At": datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
-    }
-
-
-def run_month(continue_without_activity=False):
-    state = st.session_state.state.copy()
-    state["selections"] = dict(state["selections"])
-    state["history"] = list(state["history"])
-    month = state["month"] + 1
-    selected = None if continue_without_activity else st.session_state.get("selected_activity")
-
-    if not selected and not continue_without_activity:
-        st.error("Select one activity for this month.")
-        return
-    if selected and selected in state["selections"].values():
-        st.error("This activity has already been selected.")
-        return
-
-    capital_cost = ACTIVITIES[selected]["capital_cost"] if selected else 0.0
-    if capital_cost > state["capital_budget"]:
-        st.error("The selected activity exceeds the remaining capital budget.")
-        return
-
-    metrics = calculate_month(state, month, selected)
-    previous = state["history"][-1] if state["history"] else None
-    selection_label = selected if selected else "No New Activity - Existing Effects Continue"
-    metrics.update(
-        {
-            "month": month,
-            "selected": selection_label,
-            "diagnosis": diagnosis(metrics, previous),
-        }
-    )
-
-    state["month"] = month
-    state["capital_budget"] -= capital_cost
-    if selected:
-        state["selections"][month] = selected
-    state["productivity"] = metrics["productivity"]
-    state["quality"] = metrics["quality"]
-    state["manufacturing_cost"] = metrics["manufacturing_cost"]
-    state["cumulative_profit"] += metrics["monthly_profit"]
-    state["history"].append(metrics)
-    st.session_state.state = state
-
-    try:
-        save_player(player_record(state, selection_label))
-    except Exception as error:
-        st.warning(f"Month completed, but the shared leaderboard update failed: {error}")
+def registration():
+ hero();_,c,_=st.columns([1,1.4,1])
+ with c:
+  with st.form("reg"):
+   st.subheader("Register Your Team");team=st.text_input("Team Name *");members=st.text_area("Team Members *");go=st.form_submit_button("Start Challenge",use_container_width=True)
+  if go:
+   if not team.strip() or not members.strip():st.error("Enter Team Name and Team Members.")
+   else:
+    st.session_state.update(registered=True,session_id=str(uuid.uuid4()),team_name=team.strip(),team_members=members.strip(),state=initial_state(),local_players={})
+    try:save_shared(record(st.session_state.state,"Registered - Not Started"))
+    except Exception as e:st.warning(f"Registration saved locally; shared save failed: {e}")
     st.rerun()
+def dashboard():
+ hero();state=st.session_state.state
+ with st.sidebar:
+  st.success(st.session_state.team_name);st.metric("Month",f"{state['month']} / 4");st.metric("Capital Budget",f"{state['capital_budget']:,.0f}");st.metric("Cumulative Profit",f"{state['cumulative_profit']:,.1f}")
+  if st.button("Restart"):st.session_state.clear();st.rerun()
+ if state["history"]:
+  h=state["history"][-1]
+  st.markdown(f"<div class='kpi-grid'><div class='kpi'><div class='kl'>Productivity</div><div class='kv'>{h['productivity']:.1f}<span class='ku'>products/month</span></div></div><div class='kpi'><div class='kl'>Quality</div><div class='kv'>{h['quality']:.1%}<span class='ku'>good products</span></div></div><div class='kpi'><div class='kl'>Manufacturing Cost</div><div class='kv'>{h['manufacturing_cost']:.1f}<span class='ku'>cost/product</span></div></div><div class='kpi'><div class='kl'>Landed Cost</div><div class='kv'>{h['landed_cost']:.2f}<span class='ku'>cost/good product</span></div></div><div class='kpi'><div class='kl'>Monthly Profit</div><div class='kv'>{h['monthly_profit']:,.1f}<span class='ku'>per month</span></div></div></div>",unsafe_allow_html=True)
+ st.subheader("Month-wise Performance Summary");history_table(state)
+ if state["history"]:
+  h=state["history"][-1];st.markdown(f"<div class='diag'><b>Active activity age:</b> {h['ages']}<br><b>Increment applied this month:</b> {h['effects']}</div>",unsafe_allow_html=True)
+ st.markdown("<div class='steps'>"+"".join(f"<div class='step {'done' if m<=state['month'] else 'current' if m==state['month']+1 else ''}'>Month {m}</div>" for m in range(1,5))+"</div>",unsafe_allow_html=True)
+ if state["month"]<4:
+  m=state["month"]+1;used=set(state["selections"].values());available=[n for n,a in ACTIVITIES.items() if n not in used and a["capital_cost"]<=state["capital_budget"]];cols=st.columns(2)
+  for i,(n,a) in enumerate(ACTIVITIES.items()):
+   with cols[i%2]:st.markdown(activity_card(n,a,n in used or a["capital_cost"]>state["capital_budget"]),unsafe_allow_html=True)
+  if available:
+   sel=st.selectbox(f"Month {m}: Select one activity",available,index=None);st.session_state.selected_activity=sel;st.button(f"Run Month {m}",type="primary",use_container_width=True,disabled=not sel,on_click=run_month)
+  else:st.info("No activity is affordable. Existing effects can continue.");st.button(f"Continue to Month {m}",type="primary",use_container_width=True,on_click=continue_existing)
+ else:st.success(f"Simulation complete. Cumulative profit: {state['cumulative_profit']:,.1f}")
+ leaderboard()
 
-
-def continue_with_existing_effects():
-    run_month(continue_without_activity=True)
-
-# =============================================================================
-# UI STYLE
-# =============================================================================
-st.markdown(
-    """
-<style>
-.stApp{background:radial-gradient(circle at 8% 4%,#dcfce7 0,transparent 22%),linear-gradient(135deg,#f8fffa,#eef7f0)}
-.block-container{max-width:1360px;padding-top:1.1rem;padding-bottom:3rem}#MainMenu,footer{visibility:hidden}
-.hero{padding:1.8rem 2rem;border-radius:25px;background:linear-gradient(125deg,#103d27,#166534 52%,#16a34a);color:white;box-shadow:0 18px 48px rgba(20,83,45,.2);margin-bottom:1rem}.hero h1{margin:0}.hero p{margin:.4rem 0 0;opacity:.92}
-.baseline{padding:1rem 1.15rem;border-radius:16px;background:#ecfeff;border:1px solid #67e8f9;margin:.8rem 0}.insight{padding:.9rem 1rem;border-radius:14px;background:#eff6ff;border:1px solid #93c5fd;margin:.7rem 0}
-.actionbar{display:flex;gap:8px;align-items:center;justify-content:center;margin:1rem 0 .8rem;padding:.8rem;border-radius:15px;background:white;border:1px solid #d9e8de}.step{min-width:125px;text-align:center;padding:.65rem .75rem;border-radius:12px;background:#e2e8f0;color:#475569;font-weight:750}.step.done{background:#bbf7d0;color:#14532d}.step.current{background:#15803d;color:white;box-shadow:0 6px 16px rgba(21,128,61,.25)}
-.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:.8rem 0 1rem}.kpi-card{min-width:0;background:#f4fbf6;border:1px solid #cfe3d4;border-radius:14px;padding:.8rem .85rem;overflow:hidden}.kpi-label{font-size:.88rem;line-height:1.2;color:#173d2b;margin-bottom:.45rem;white-space:normal}.kpi-value{font-size:clamp(1.25rem,2.15vw,2.05rem);line-height:1.08;font-weight:500;color:#071b12;white-space:normal;overflow-wrap:anywhere;word-break:break-word}.kpi-unit{display:block;font-size:.72rem;line-height:1.2;color:#496557;margin-top:.28rem;font-weight:500}@media(max-width:1050px){.kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:680px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi-value{font-size:1.35rem}}@media(max-width:420px){.kpi-grid{grid-template-columns:1fr}}
-.activity{background:white;border:1px solid #d9e8de;border-radius:18px;padding:1rem;box-shadow:0 8px 22px rgba(20,83,45,.07);height:100%}.activity.unavailable{opacity:.47;filter:grayscale(.7)}.activity h3{font-size:1.04rem;margin:.15rem 0 .45rem}.ico{font-size:2rem}.capital{margin-top:.7rem;padding:.5rem .65rem;border-radius:9px;background:#f0fdf4;color:#166534;font-weight:800}
-.effect-summary{width:100%;border-collapse:collapse;margin-top:.55rem;font-size:.82rem}.effect-summary td{padding:.55rem .5rem;border-bottom:1px solid #dbe5df;vertical-align:top}.effect-summary td:first-child{width:31%;font-weight:800;color:#14532d;background:#f8fafc}.effect-summary tr:last-child td{border-bottom:0}
-.process-wrap{background:white;border:1px solid #b9d8c1;border-radius:22px;padding:1rem;overflow-x:auto}.process-line{min-width:1000px;display:flex;align-items:center;gap:10px;position:relative;padding:20px 10px 50px}.unit{width:145px;min-height:80px;border:2px solid #15803d;border-radius:13px;background:#eefbf1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-weight:750}.unit span{font-size:1.8rem}.arrow{width:48px;height:12px;background:#15803d;position:relative}.arrow:after{content:"";position:absolute;right:-13px;top:-7px;border-left:14px solid #15803d;border-top:13px solid transparent;border-bottom:13px solid transparent}.belt{position:absolute;left:15px;right:15px;bottom:18px;height:10px;border-radius:6px;background:repeating-linear-gradient(90deg,#14532d 0 24px,#86efac 24px 38px);animation:belt .75s linear infinite}.tile{position:absolute;bottom:29px;width:34px;height:20px;background:#f59e0b;border:2px solid #9a5a06;border-radius:3px;animation:move 8s linear infinite}.tile.t2{animation-delay:-2.7s}.tile.t3{animation-delay:-5.4s}.flow-label{position:absolute;bottom:0;left:15px;color:#166534;font-size:.78rem;font-weight:700}@keyframes belt{to{background-position:38px 0}}@keyframes move{0%{left:2%}100%{left:95%}}
-.stButton>button,.stFormSubmitButton>button{border-radius:12px;min-height:45px;font-weight:700}.stFormSubmitButton>button{background:#15803d!important;color:white!important;border:0!important}
-</style>
-""",
-    unsafe_allow_html=True,
-)
-
-# =============================================================================
-# UI HELPERS
-# =============================================================================
-def hero():
-    st.markdown(
-        "<div class='hero'><h1>🏆 Four-Month Profit Optimization Challenge</h1>"
-        "<p>Select one unique activity each month. Effects are incremental by the "
-        "activity's active month and remain accumulated in all later calendar months.</p></div>",
-        unsafe_allow_html=True,
-    )
-
-
-def conveyor(productivity):
-    duration = max(2.8, min(14, 900 / max(productivity, 1)))
-    st.markdown(
-        f"""<div class='process-wrap'><div class='process-line'>
-        <div class='unit'><span>🧱</span>Inputs</div><div class='arrow'></div>
-        <div class='unit'><span>🏭</span>Production</div><div class='arrow'></div>
-        <div class='unit'><span>✅</span>Quality</div><div class='arrow'></div>
-        <div class='unit'><span>🚚</span>Landed Cost</div><div class='arrow'></div>
-        <div class='unit'><span>💰</span>Profit</div><div class='belt'></div>
-        <div class='tile' style='animation-duration:{duration}s'></div>
-        <div class='tile t2' style='animation-duration:{duration}s'></div>
-        <div class='tile t3' style='animation-duration:{duration}s'></div>
-        <div class='flow-label'>Conveyor speed linked to productivity: {productivity:.1f} products/month</div>
-        </div></div>""",
-        unsafe_allow_html=True,
-    )
-
-
-def month_bar(current):
-    boxes = []
-    for month in range(1, 5):
-        css = "done" if month <= current else "current" if month == current + 1 else ""
-        label = "Completed" if month <= current else "Select Now" if month == current + 1 else "Upcoming"
-        boxes.append(f"<div class='step {css}'>Month {month}<br><small>{label}</small></div>")
-    st.markdown("<div class='actionbar'>" + "".join(boxes) + "</div>", unsafe_allow_html=True)
-
-
-def activity_card(name, activity, unavailable):
-    css = "activity unavailable" if unavailable else "activity"
-    lines = activity["effect_lines"]
-    return f"""<div class='{css}'><div class='ico'>{activity['icon']}</div><h3>{name}</h3>
-    <table class='effect-summary'>
-    <tr><td>Productivity<br><small>(products/month)</small></td><td>{lines['Productivity']}</td></tr>
-    <tr><td>Quality<br><small>(percentage points)</small></td><td>{lines['Quality']}</td></tr>
-    <tr><td>Manufacturing Cost<br><small>(cost/product)</small></td><td>{lines['Manufacturing Cost']}</td></tr>
-    </table><div class='capital'>Capital Cost: {activity['capital_cost']:,.0f}</div></div>"""
-
-
-def result_trend(history):
-    frame = pd.DataFrame(history)
-    labels = [f"Month {int(value)}" for value in frame["month"]]
-    figure = go.Figure()
-    figure.add_bar(
-        x=labels,
-        y=frame["monthly_profit"],
-        name="Monthly Profit",
-        marker_color="#15803d",
-    )
-    figure.add_scatter(
-        x=labels,
-        y=frame["landed_cost"],
-        name="Landed Cost",
-        yaxis="y2",
-        mode="lines+markers",
-        line=dict(color="#f59e0b"),
-    )
-    figure.update_layout(
-        title="Monthly Profit and Landed Cost",
-        yaxis_title="Monthly Profit",
-        yaxis2=dict(title="Landed Cost / Good Product", overlaying="y", side="right"),
-    )
-    st.plotly_chart(figure, use_container_width=True)
-
-
-def leaderboard_section():
-    title_col, refresh_col = st.columns([5, 1])
-    with title_col:
-        st.subheader("🏅 Live Shared Leaderboard")
-    with refresh_col:
-        if st.button("Refresh ↻", use_container_width=True, key="refresh_shared_leaderboard"):
-            st.rerun()
-    if github_configured():
-        st.caption("Shared storage connected: data/leaderboard.json")
-    else:
-        st.error("Shared storage is not connected. Other active players cannot appear until GitHub secrets are configured.")
-    try:
-        records = shared_players()
-    except Exception as error:
-        records = list(st.session_state.get("local_players", {}).values())
-        st.warning(f"Shared leaderboard could not be refreshed: {error}")
-
-    if not records:
-        st.info("Registered players will appear here immediately.")
-        return
-
-    frame = pd.DataFrame(records)
-    for column in ["Month", "Cumulative Profit", "Capital Budget Remaining"]:
-        frame[column] = pd.to_numeric(frame[column], errors="coerce").fillna(0)
-    frame = frame.sort_values(
-        ["Cumulative Profit", "Month", "Updated At"],
-        ascending=[False, False, True],
-    ).reset_index(drop=True)
-    frame.insert(0, "Rank", range(1, len(frame) + 1))
-    st.dataframe(
-        frame[
-            [
-                "Rank",
-                "Team Name",
-                "Team Members",
-                "Month",
-                "Selected Activity",
-                "Cumulative Profit",
-                "Capital Budget Remaining",
-            ]
-        ],
-        use_container_width=True,
-        hide_index=True,
-    )
-    if not github_configured():
-        st.caption("Configure GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO, and GITHUB_BRANCH in Streamlit secrets, then use Refresh.")
-
-# =============================================================================
-# PAGES
-# =============================================================================
-def registration_page():
-    hero()
-    conveyor(BASELINE["productivity"])
-    _, center, _ = st.columns([1, 1.5, 1])
-    with center:
-        with st.form("registration"):
-            st.subheader("Register Your Team")
-            team = st.text_input("Team Name *")
-            members = st.text_area("Team Members *", height=110)
-            submitted = st.form_submit_button("Start Challenge →", use_container_width=True)
-        if submitted:
-            if not team.strip() or not members.strip():
-                st.error("Enter both Team Name and Team Members.")
-            else:
-                st.session_state.update(
-                    registered=True,
-                    session_id=str(uuid.uuid4()),
-                    team_name=team.strip(),
-                    team_members=members.strip(),
-                    state=initial_state(),
-                    local_players={},
-                )
-                try:
-                    save_player(player_record(st.session_state.state))
-                except Exception as error:
-                    st.warning(f"Registration succeeded, but leaderboard registration failed: {error}")
-                st.rerun()
-
-
-def dashboard_page():
-    hero()
-    state = st.session_state.state
-    conveyor(state["productivity"])
-
-    with st.sidebar:
-        st.success(f"Team: {st.session_state.team_name}")
-        st.write("**Team Members**")
-        st.write(st.session_state.team_members)
-        st.metric("Month", f"{state['month']} / 4")
-        st.metric("Capital Budget", f"{state['capital_budget']:,.0f}")
-        st.metric("Cumulative Profit", f"{state['cumulative_profit']:,.1f}")
-        if st.button("Restart Simulation", use_container_width=True):
-            st.session_state.clear()
-            st.rerun()
-
-    if not state["history"]:
-        baseline_profit = 80 * .75 * 50 - 80 * 30
-        st.markdown(
-            f"<div class='baseline'><h3>Month 0 Baseline</h3><p>"
-            f"<b>Productivity:</b> 80 products/month &nbsp; | &nbsp; "
-            f"<b>Quality:</b> 75% &nbsp; | &nbsp; "
-            f"<b>Manufacturing Cost:</b> 30/product &nbsp; | &nbsp; "
-            f"<b>Selling Price:</b> 50/product &nbsp; | &nbsp; "
-            f"<b>Capital Budget:</b> 1,500</p>"
-            f"<p>Baseline monthly profit before any activity: {baseline_profit:,.1f}</p></div>",
-            unsafe_allow_html=True,
-        )
-    else:
-        latest = state["history"][-1]
-        st.markdown(
-            f"""<div class='kpi-grid'>
-            <div class='kpi-card'><div class='kpi-label'>Productivity</div><div class='kpi-value'>{latest['productivity']:.1f}<span class='kpi-unit'>products/month</span></div></div>
-            <div class='kpi-card'><div class='kpi-label'>Quality</div><div class='kpi-value'>{latest['quality']:.1%}<span class='kpi-unit'>good products</span></div></div>
-            <div class='kpi-card'><div class='kpi-label'>Manufacturing Cost</div><div class='kpi-value'>{latest['manufacturing_cost']:.1f}<span class='kpi-unit'>cost/product</span></div></div>
-            <div class='kpi-card'><div class='kpi-label'>Landed Cost</div><div class='kpi-value'>{latest['landed_cost']:.2f}<span class='kpi-unit'>cost/good product</span></div></div>
-            <div class='kpi-card'><div class='kpi-label'>Monthly Profit</div><div class='kpi-value'>{latest['monthly_profit']:,.1f}<span class='kpi-unit'>per month</span></div></div>
-            </div>""",
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            f"<div class='insight'><b>Month {state['month']} diagnosis:</b> "
-            f"{latest['diagnosis']}<br><b>Active activity age:</b> "
-            f"{latest['active_stages']}<br><b>Increment applied this month:</b> "
-            f"{latest['applied_effects']}</div>",
-            unsafe_allow_html=True,
-        )
-        result_trend(state["history"])
-
-    month_bar(state["month"])
-
-    if state["month"] < 4:
-        month = state["month"] + 1
-        used = set(state["selections"].values())
-        available = [
-            name
-            for name, activity in ACTIVITIES.items()
-            if name not in used
-            and activity["capital_cost"] <= state["capital_budget"]
-        ]
-        st.subheader(f"Month {month}: Select One Activity")
-        st.caption(
-            "Each row shows the increment by the activity's active month. "
-            "Previously achieved KPI improvements remain in the process state."
-        )
-
-        columns = st.columns(2)
-        for index, (name, activity) in enumerate(ACTIVITIES.items()):
-            unavailable = (
-                name in used
-                or activity["capital_cost"] > state["capital_budget"]
-            )
-            with columns[index % 2]:
-                st.markdown(
-                    activity_card(name, activity, unavailable),
-                    unsafe_allow_html=True,
-                )
-
-        if available:
-            selected = st.selectbox(
-                "Choose the Month activity",
-                available,
-                index=None,
-                placeholder="Select one activity",
-                key=f"selection_month_{month}",
-            )
-            st.session_state.selected_activity = selected
-            if selected:
-                capital_cost = ACTIVITIES[selected]["capital_cost"]
-                current, selected_cost, after = st.columns(3)
-                current.metric("Current Capital Budget", f"{state['capital_budget']:,.0f}")
-                selected_cost.metric("Selected Capital Cost", f"{capital_cost:,.0f}")
-                after.metric("Budget After", f"{state['capital_budget'] - capital_cost:,.0f}")
-            st.button(
-                f"Run Month {month} ▶",
-                type="primary",
-                use_container_width=True,
-                disabled=not selected,
-                on_click=run_month,
-            )
-        else:
-            st.session_state.selected_activity = None
-            st.info(
-                "No unused activity is affordable. Continue so all existing "
-                "activities advance to their next active month and apply only "
-                "that active month's incremental effect."
-            )
-            st.button(
-                f"Continue to Month {month} with Existing Effects ▶",
-                type="primary",
-                use_container_width=True,
-                on_click=continue_with_existing_effects,
-            )
-    else:
-        st.success(
-            f"Simulation complete. Four-month cumulative profit: "
-            f"{state['cumulative_profit']:,.1f}. Capital budget remaining: "
-            f"{state['capital_budget']:,.1f}."
-        )
-        st.info(
-            "Leaderboard ranking is based only on cumulative profit. "
-            "Unspent capital budget carries no penalty."
-        )
-
-    leaderboard_section()
-
-
-if st.session_state.get("registered"):
-    dashboard_page()
-else:
-    registration_page()
+if st.session_state.get("registered"):dashboard()
+else:registration()
