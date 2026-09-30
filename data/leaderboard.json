@@ -78,15 +78,15 @@
     "Session ID": "03827c8a-1bb1-45f5-bb87-5a630298270c",
     "Team Name": "Trial 2",
     "Team Members": "Chinmoy",
-    "Month": 1,
-    "Selected Activity": "Statistical Process Control",
-    "Productivity": 80.0,
-    "Quality %": 78.0,
+    "Month": 2,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Productivity": 81.0,
+    "Quality %": 81.0,
     "Manufacturing Cost": 30.0,
-    "Landed Cost": 43.26923076923077,
-    "Monthly Profit": 420.00000000000045,
-    "Cumulative Profit": 420.00000000000045,
-    "Capital Budget Remaining": 1200.0,
-    "Updated At": "2026-09-30 16:39:19.655726"
+    "Landed Cost": 41.609510745313216,
+    "Monthly Profit": 550.5,
+    "Cumulative Profit": 970.5000000000005,
+    "Capital Budget Remaining": 900.0,
+    "Updated At": "2026-09-30 16:40:15.670201"
   }
 }
