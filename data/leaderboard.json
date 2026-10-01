@@ -24,5 +24,18 @@
     "Productivity": 91.0,
     "Quality %": 70.0,
     "Manufacturing Cost": 29.0
+  },
+  "fef401d8-f5c3-424a-9931-047b40ff2952": {
+    "Session ID": "fef401d8-f5c3-424a-9931-047b40ff2952",
+    "Team Name": "M AASA",
+    "Team Members": "SASAS",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-10-01T05:57:02.810603",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
