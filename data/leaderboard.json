@@ -42,13 +42,13 @@
     "Session ID": "20069854-bbf0-4a19-b922-db5cd7409c93",
     "Team Name": "Surya",
     "Team Members": "XX",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit": 0.0,
-    "Capital Budget Remaining": 1500.0,
-    "Updated At": "2026-10-01T04:19:45.981511",
-    "Productivity": 80,
-    "Quality %": 75,
-    "Manufacturing Cost": 30
+    "Month": 1,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit": 347.5,
+    "Capital Budget Remaining": 1125.0,
+    "Updated At": "2026-10-01T04:23:41.017859",
+    "Productivity": 85.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 29.0
   }
 }
