@@ -37,5 +37,18 @@
     "Productivity": 80,
     "Quality %": 75,
     "Manufacturing Cost": 30
+  },
+  "3604a2ae-cf08-4653-a692-fbf9d3f1e12a": {
+    "Session ID": "3604a2ae-cf08-4653-a692-fbf9d3f1e12a",
+    "Team Name": "nasasssa",
+    "Team Members": "sas",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-10-01T06:00:27.914389",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
