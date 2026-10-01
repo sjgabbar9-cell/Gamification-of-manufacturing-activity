@@ -9,7 +9,7 @@ import requests
 import streamlit as st
 
 st.set_page_config(page_title="Manufacturing Profit Challenge", page_icon="🏆", layout="wide")
-APP_VERSION = "SQM Scale v2 - 80,000 baseline"
+APP_VERSION="SQM Scale v3"
 
 # -----------------------------------------------------------------------------
 # MODEL CONFIGURATION
@@ -33,7 +33,7 @@ ACTIVITIES = {
         "effect_lines": {
             "Productivity": "+1,000 sqm/month in the activation month; the improved level then remains constant.",
             "Quality": "No change in the activation month or later active months.",
-            "Manufacturing Cost": "Decreases by 100 per sqm in the activation month; the reduced level then remains constant.",
+            "Manufacturing Cost": "Decreases by 1 per sqm in the activation month; the reduced level then remains constant.",
         },
     },
     "Changeover Time Optimization (SMED)": {
@@ -43,9 +43,9 @@ ACTIVITIES = {
         "quality_increment": [0.00, 0.00, 0.00, 0.00],
         "cost_reduction_increment": [100.0, 100.0, 100.0, 100.0],
         "effect_lines": {
-            "Productivity": "+500 sqm/month in Active M1, then  +100 sqm/month in each later active month.",
+            "Productivity": "+500 sqm/month in Active M1, then +100 sqm/month in each later active month.",
             "Quality": "No change in any active month.",
-            "Manufacturing Cost": "Decreases by 100 per sqm in every active month.",
+            "Manufacturing Cost": "Decreases by 1 per sqm in every active month.",
         },
     },
     "Run Beyond Equipment Rated Capacity": {
@@ -69,7 +69,7 @@ ACTIVITIES = {
         "effect_lines": {
             "Productivity": "+100 sqm/month in every active month.",
             "Quality": "No change in any active month.",
-            "Manufacturing Cost": "Decreases by 100 per sqm from the activation month and in every later active month.",
+            "Manufacturing Cost": "Decreases by 1 per sqm from the activation month and in every later active month.",
         },
     },
     "Statistical Process Control": {
@@ -91,9 +91,9 @@ ACTIVITIES = {
         "quality_increment": [0.00, 0.01, 0.01, 0.01],
         "cost_reduction_increment": [0.0, 100.0, 100.0, 100.0],
         "effect_lines": {
-            "Productivity": "No change in Active M1, then  +100 sqm/month in each later active month.",
+            "Productivity": "No change in Active M1, then +100 sqm/month in each later active month.",
             "Quality": "No change in Active M1, then +1 percentage point in each later active month.",
-            "Manufacturing Cost": "No change in Active M1, then decreases by 100 per sqm in each later active month.",
+            "Manufacturing Cost": "No change in Active M1, then decreases by 1 per sqm in each later active month.",
         },
     },
 }
@@ -174,12 +174,12 @@ def calculate_month(state,month,new_activity=None):
         ages.append(f"{name}: Active M{index+1}")
         effects.append(f"{name}: productivity {dp:+.1f} sqm/month, quality {dq*100:+.1f} pp, cost {-dc:+.1f}/sqm")
     q=max(0,min(1,q));c=max(0,c);capital=ACTIVITIES[new_activity]["capital_cost"] if new_activity else 0.0
-    good=p*q;landed=(p*c+capital)/p if p else 0.0;profit=good*5000-p*c-capital
+    good=p*q;landed=(p*c+capital)/p if p else 0.0;profit=(good*5000-p*c-capital)/p if p else 0.0
     return {"month":month,"productivity":p,"quality":q,"manufacturing_cost":c,"capital_cost":capital,"landed_cost":landed,"monthly_profit":profit,"ages":" | ".join(ages),"effects":" | ".join(effects)}
 
 def player_record(state,label):
     latest=state["history"][-1] if state["history"] else None
-    return {"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":state["month"],"Selected Activity":label,"Cumulative Profit":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Updated At":datetime.now().isoformat(timespec="microseconds"),"Productivity":latest["productivity"] if latest else 80000,"Quality %":latest["quality"]*100 if latest else 75,"Manufacturing Cost":latest["manufacturing_cost"] if latest else 3000}
+    return {"Session ID":st.session_state.session_id,"Team Name":st.session_state.team_name,"Team Members":st.session_state.team_members,"Month":state["month"],"Selected Activity":label,"Cumulative Profit / sqm / sqm":state["cumulative_profit"],"Capital Budget Remaining":state["capital_budget"],"Updated At":datetime.now().isoformat(timespec="microseconds"),"Productivity":latest["productivity"] if latest else 80000,"Quality %":latest["quality"]*100 if latest else 75,"Manufacturing Cost":latest["manufacturing_cost"] if latest else 3000}
 
 def run_month(no_new=False):
     state=st.session_state.state.copy();state["history"]=list(state["history"]);state["selections"]=dict(state["selections"])
@@ -205,22 +205,22 @@ def hero():
     st.markdown(f"<div class='hero'><h1>🏆 Four-Month Profit Optimization Challenge</h1><p>Effects are applied by active month and remain accumulated.</p><small>Build: {APP_VERSION}</small></div>",unsafe_allow_html=True)
 
 def history_table(state):
-    baseline_profit=80000*.75*5000-80000*3000
-    rows=[{"Period":"Baseline","Productivity":"80,000 sqm/month","Quality":"75.0%","Manufacturing Cost":"3,000 /sqm","Landed Cost":"3,000.00 /sqm","Monthly Profit":f"{baseline_profit:,.1f}","Cumulative Profit":"0.0"}]
+    baseline_profit=.75*5000-3000
+    rows=[{"Period":"Baseline","Productivity":"80,000 sqm/month","Quality":"75.0%","Manufacturing Cost":"3,000 /sqm","Landed Cost":"3,000.00 /sqm","Profit / sqm / month":f"{baseline_profit:,.1f}","Cumulative Profit / sqm / sqm":"0.0"}]
     for h in state["history"]:
-        rows.append({"Period":f"Month {h['month']}","Productivity":f"{h['productivity']:,.0f} sqm/month","Quality":f"{h['quality']:.1%}","Manufacturing Cost":f"{h['manufacturing_cost']:.1f} /sqm","Landed Cost":f"{h['landed_cost']:.2f} /sqm","Monthly Profit":f"{h['monthly_profit']:,.1f}","Cumulative Profit":f"{h['cumulative_profit']:,.1f}"})
+        rows.append({"Period":f"Month {h['month']}","Productivity":f"{h['productivity']:,.0f} sqm/month","Quality":f"{h['quality']:.1%}","Manufacturing Cost":f"{h['manufacturing_cost']:,.0f} /sqm","Landed Cost":f"{h['landed_cost']:,.2f} /sqm","Profit / sqm / month":f"{h['monthly_profit']:,.1f}","Cumulative Profit / sqm / sqm":f"{h['cumulative_profit']:,.1f}"})
     for month in range(state["month"]+1,5):
-        rows.append({"Period":f"Month {month}","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Monthly Profit":"-","Cumulative Profit":"-"})
-    rows.append({"Period":"Cumulative","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Monthly Profit":"-","Cumulative Profit":f"{state['cumulative_profit']:,.1f}"})
+        rows.append({"Period":f"Month {month}","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Profit / sqm / month":"-","Cumulative Profit / sqm / sqm":"-"})
+    rows.append({"Period":"Cumulative","Productivity":"-","Quality":"-","Manufacturing Cost":"-","Landed Cost":"-","Profit / sqm / month":"-","Cumulative Profit / sqm / sqm":f"{state['cumulative_profit']:,.1f}"})
     st.markdown(pd.DataFrame(rows).to_html(index=False,escape=False,classes="summary"),unsafe_allow_html=True)
 
 def performance_graph(state):
-    baseline_profit=80000*.75*5000-80000*3000
+    baseline_profit=.75*5000-3000
     periods=["Baseline"]+[f"Month {h['month']}" for h in state["history"]]
     monthly=[baseline_profit]+[h["monthly_profit"] for h in state["history"]]
     cumulative=[0.0]+[h["cumulative_profit"] for h in state["history"]]
     p=[80000.0]+[h["productivity"] for h in state["history"]];q=[75.0]+[h["quality"]*100 for h in state["history"]];c=[3000.0]+[h["manufacturing_cost"] for h in state["history"]]
-    fig=go.Figure();fig.add_bar(x=periods,y=monthly,name="Monthly Profit",marker_color="#15803d",text=[f"{v:,.1f}" for v in monthly],textposition="outside");fig.add_scatter(x=periods,y=cumulative,name="Cumulative Profit",mode="lines+markers+text",text=[f"{v:,.1f}" for v in cumulative],textposition="top center",line=dict(color="#f59e0b",width=3));fig.update_layout(title="Monthly and Cumulative Profit Trend",height=420,hovermode="x unified",legend=dict(orientation="h",y=1.08));st.plotly_chart(fig,use_container_width=True)
+    fig=go.Figure();fig.add_bar(x=periods,y=monthly,name="Profit / sqm / month",marker_color="#15803d",text=[f"{v:,.1f}" for v in monthly],textposition="outside");fig.add_scatter(x=periods,y=cumulative,name="Cumulative Profit / sqm / sqm",mode="lines+markers+text",text=[f"{v:,.1f}" for v in cumulative],textposition="top center",line=dict(color="#f59e0b",width=3));fig.update_layout(title="Monthly and Cumulative Profit / sqm Trend",height=420,hovermode="x unified",legend=dict(orientation="h",y=1.08));st.plotly_chart(fig,use_container_width=True)
     fig2=go.Figure();fig2.add_scatter(x=periods,y=p,name="Productivity (sqm/month)",mode="lines+markers");fig2.add_scatter(x=periods,y=q,name="Quality (%)",mode="lines+markers");fig2.add_scatter(x=periods,y=c,name="Manufacturing Cost (cost/sqm)",mode="lines+markers");fig2.update_layout(title="Operational KPI Trend",height=420,hovermode="x unified",legend=dict(orientation="h",y=1.08));st.plotly_chart(fig2,use_container_width=True)
 
 def activity_card(name,a,unavailable):
@@ -234,7 +234,7 @@ def leaderboard():
     try:rows=all_players()
     except Exception as error:st.warning(f"Leaderboard refresh failed: {error}");rows=list(st.session_state.get("local_players",{}).values())
     if not rows:st.info("Registered players will appear here.");return
-    frame=pd.DataFrame(rows);frame["Cumulative Profit"]=pd.to_numeric(frame["Cumulative Profit"],errors="coerce").fillna(0);frame=frame.sort_values(["Cumulative Profit","Month"],ascending=[False,False]).reset_index(drop=True);frame.insert(0,"Rank",range(1,len(frame)+1));st.dataframe(frame[["Rank","Team Name","Team Members","Month","Selected Activity","Cumulative Profit","Capital Budget Remaining"]],use_container_width=True,hide_index=True)
+    frame=pd.DataFrame(rows);frame["Cumulative Profit / sqm / sqm"]=pd.to_numeric(frame["Cumulative Profit / sqm / sqm"],errors="coerce").fillna(0);frame=frame.sort_values(["Cumulative Profit / sqm / sqm","Month"],ascending=[False,False]).reset_index(drop=True);frame.insert(0,"Rank",range(1,len(frame)+1));st.dataframe(frame[["Rank","Team Name","Team Members","Month","Selected Activity","Cumulative Profit / sqm / sqm","Capital Budget Remaining"]],use_container_width=True,hide_index=True)
 
 # -----------------------------------------------------------------------------
 # PAGES
@@ -255,12 +255,12 @@ def registration_page():
 def dashboard_page():
     hero();state=st.session_state.state
     with st.sidebar:
-        st.success(st.session_state.team_name);st.write(st.session_state.team_members);st.metric("Month",f"{state['month']} / 4");st.metric("Capital Budget",f"{state['capital_budget']:,.0f}");st.metric("Cumulative Profit",f"{state['cumulative_profit']:,.1f}")
+        st.success(st.session_state.team_name);st.write(st.session_state.team_members);st.metric("Month",f"{state['month']} / 4");st.metric("Capital Budget",f"{state['capital_budget']:,.0f}");st.metric("Cumulative Profit / sqm / sqm",f"{state['cumulative_profit']:,.1f}")
         if st.button("Restart"):st.session_state.clear();st.rerun()
     if state["history"]:
         h=state["history"][-1]
-        st.markdown(f"<div class='kpi-grid'><div class='kpi'><div class='kl'>Productivity</div><div class='kv'>{h['productivity']:,.0f}<span class='ku'>sqm/month</span></div></div><div class='kpi'><div class='kl'>Quality</div><div class='kv'>{h['quality']:.1%}<span class='ku'>good products</span></div></div><div class='kpi'><div class='kl'>Manufacturing Cost</div><div class='kv'>{h['manufacturing_cost']:.1f}<span class='ku'>cost/sqm</span></div></div><div class='kpi'><div class='kl'>Landed Cost</div><div class='kv'>{h['landed_cost']:.2f}<span class='ku'>cost/sqm</span></div></div><div class='kpi'><div class='kl'>Monthly Profit</div><div class='kv'>{h['monthly_profit']:,.1f}<span class='ku'>per month</span></div></div></div>",unsafe_allow_html=True)
-    st.subheader("Month-wise Performance Summary");st.caption("Scaled model: Baseline productivity 80,000 sqm/month | Manufacturing cost 3,000/sqm | Capital budget 1,500,000");history_table(state)
+        st.markdown(f"<div class='kpi-grid'><div class='kpi'><div class='kl'>Productivity</div><div class='kv'>{h['productivity']:,.0f}<span class='ku'>sqm/month</span></div></div><div class='kpi'><div class='kl'>Quality</div><div class='kv'>{h['quality']:.1%}<span class='ku'>good products</span></div></div><div class='kpi'><div class='kl'>Manufacturing Cost</div><div class='kv'>{h['manufacturing_cost']:,.0f}<span class='ku'>cost/sqm</span></div></div><div class='kpi'><div class='kl'>Landed Cost</div><div class='kv'>{h['landed_cost']:,.2f}<span class='ku'>cost/sqm</span></div></div><div class='kpi'><div class='kl'>Profit / sqm / month</div><div class='kv'>{h['monthly_profit']:,.1f}<span class='ku'>profit/sqm/month</span></div></div></div>",unsafe_allow_html=True)
+    st.subheader("Month-wise Performance Summary");history_table(state)
     st.subheader("Performance Graphs");performance_graph(state)
     st.markdown("<div class='steps'>"+"".join(f"<div class='step {'done' if m<=state['month'] else 'current' if m==state['month']+1 else ''}'>Month {m}</div>" for m in range(1,5))+"</div>",unsafe_allow_html=True)
     if state["month"]<4:
