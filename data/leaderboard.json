@@ -24,5 +24,18 @@
     "Productivity": 80,
     "Quality %": 75,
     "Manufacturing Cost": 30
+  },
+  "bbb5b3c4-9adc-47c0-b50d-61d27855b029": {
+    "Session ID": "bbb5b3c4-9adc-47c0-b50d-61d27855b029",
+    "Team Name": "FMPOC",
+    "Team Members": "F,M,P,O,C",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-10-01T04:19:13.988828",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
