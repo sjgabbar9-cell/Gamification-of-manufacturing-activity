@@ -24,5 +24,18 @@
     "Productivity": 80000,
     "Quality %": 75,
     "Manufacturing Cost": 3000
+  },
+  "01016ab7-2994-4231-b107-ad7a2c50c04e": {
+    "Session ID": "01016ab7-2994-4231-b107-ad7a2c50c04e",
+    "Team Name": "boss",
+    "Team Members": "bsss",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T06:16:09.973086",
+    "Productivity": 80000,
+    "Quality %": 75,
+    "Manufacturing Cost": 3000
   }
 }
