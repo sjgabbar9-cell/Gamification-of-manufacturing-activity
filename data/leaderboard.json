@@ -24,5 +24,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "d21acd4b-99ad-4723-84ad-148080ce89cb": {
+    "Session ID": "d21acd4b-99ad-4723-84ad-148080ce89cb",
+    "Team Name": "mxmx",
+    "Team Members": "anan",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T10:46:27.168635",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
