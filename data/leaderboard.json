@@ -89,5 +89,18 @@
     "Productivity": 80000,
     "Quality %": 75,
     "Manufacturing Cost": 3000
+  },
+  "f0e51c8c-b24f-49b1-9f13-6ad5c7e40d8f": {
+    "Session ID": "f0e51c8c-b24f-49b1-9f13-6ad5c7e40d8f",
+    "Team Name": "msa",
+    "Team Members": "nasas",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T06:45:08.889427",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
