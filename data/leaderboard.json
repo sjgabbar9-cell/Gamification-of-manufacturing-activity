@@ -37,5 +37,18 @@
     "Productivity": 81900.0,
     "Quality %": 76.0,
     "Manufacturing Cost": 2400.0
+  },
+  "c046a09a-7007-409f-8ea6-01cacfc7df1e": {
+    "Session ID": "c046a09a-7007-409f-8ea6-01cacfc7df1e",
+    "Team Name": "haus khauz",
+    "Team Members": "ddd",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T06:20:41.525901",
+    "Productivity": 80000,
+    "Quality %": 75,
+    "Manufacturing Cost": 3000
   }
 }
