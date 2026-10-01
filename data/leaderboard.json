@@ -3,14 +3,14 @@
     "Session ID": "720dd904-f410-4dfd-87ea-e43d151b7d61",
     "Team Name": "Krishna",
     "Team Members": "Krishna",
-    "Month": 1,
-    "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit": 420.00000000000045,
-    "Capital Budget Remaining": 1200.0,
-    "Updated At": "2026-10-01T04:23:40.956727",
-    "Productivity": 80.0,
-    "Quality %": 78.0,
-    "Manufacturing Cost": 30.0
+    "Month": 2,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit": 1022.5000000000009,
+    "Capital Budget Remaining": 825.0,
+    "Updated At": "2026-10-01T04:24:37.788376",
+    "Productivity": 85.0,
+    "Quality %": 81.0,
+    "Manufacturing Cost": 29.0
   },
   "12c2f547-d2c6-44ab-ab6f-33d545d49d42": {
     "Session ID": "12c2f547-d2c6-44ab-ab6f-33d545d49d42",
