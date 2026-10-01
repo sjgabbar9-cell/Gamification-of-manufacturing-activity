@@ -9,6 +9,7 @@ import requests
 import streamlit as st
 
 st.set_page_config(page_title="Manufacturing Profit Challenge", page_icon="🏆", layout="wide")
+APP_VERSION = "SQM Scale v2 - 80,000 baseline"
 
 # -----------------------------------------------------------------------------
 # MODEL CONFIGURATION
@@ -201,7 +202,7 @@ def continue_existing():run_month(True)
 # UI HELPERS
 # -----------------------------------------------------------------------------
 def hero():
-    st.markdown("<div class='hero'><h1>🏆 Four-Month Profit Optimization Challenge</h1><p>Effects are applied by active month and remain accumulated.</p></div>",unsafe_allow_html=True)
+    st.markdown(f"<div class='hero'><h1>🏆 Four-Month Profit Optimization Challenge</h1><p>Effects are applied by active month and remain accumulated.</p><small>Build: {APP_VERSION}</small></div>",unsafe_allow_html=True)
 
 def history_table(state):
     baseline_profit=80000*.75*5000-80000*3000
@@ -259,7 +260,7 @@ def dashboard_page():
     if state["history"]:
         h=state["history"][-1]
         st.markdown(f"<div class='kpi-grid'><div class='kpi'><div class='kl'>Productivity</div><div class='kv'>{h['productivity']:,.0f}<span class='ku'>sqm/month</span></div></div><div class='kpi'><div class='kl'>Quality</div><div class='kv'>{h['quality']:.1%}<span class='ku'>good products</span></div></div><div class='kpi'><div class='kl'>Manufacturing Cost</div><div class='kv'>{h['manufacturing_cost']:.1f}<span class='ku'>cost/sqm</span></div></div><div class='kpi'><div class='kl'>Landed Cost</div><div class='kv'>{h['landed_cost']:.2f}<span class='ku'>cost/sqm</span></div></div><div class='kpi'><div class='kl'>Monthly Profit</div><div class='kv'>{h['monthly_profit']:,.1f}<span class='ku'>per month</span></div></div></div>",unsafe_allow_html=True)
-    st.subheader("Month-wise Performance Summary");history_table(state)
+    st.subheader("Month-wise Performance Summary");st.caption("Scaled model: Baseline productivity 80,000 sqm/month | Manufacturing cost 3,000/sqm | Capital budget 1,500,000");history_table(state)
     st.subheader("Performance Graphs");performance_graph(state)
     st.markdown("<div class='steps'>"+"".join(f"<div class='step {'done' if m<=state['month'] else 'current' if m==state['month']+1 else ''}'>Month {m}</div>" for m in range(1,5))+"</div>",unsafe_allow_html=True)
     if state["month"]<4:
