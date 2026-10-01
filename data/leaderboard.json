@@ -11,5 +11,18 @@
     "Productivity": 80,
     "Quality %": 75,
     "Manufacturing Cost": 30
+  },
+  "12c2f547-d2c6-44ab-ab6f-33d545d49d42": {
+    "Session ID": "12c2f547-d2c6-44ab-ab6f-33d545d49d42",
+    "Team Name": "Slytherin",
+    "Team Members": "a,b,c,d",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit": 0.0,
+    "Capital Budget Remaining": 1500.0,
+    "Updated At": "2026-10-01T04:18:59.081131",
+    "Productivity": 80,
+    "Quality %": 75,
+    "Manufacturing Cost": 30
   }
 }
