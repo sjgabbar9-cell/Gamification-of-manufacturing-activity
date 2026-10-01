@@ -11,5 +11,18 @@
     "Productivity": 81500.0,
     "Quality %": 75.0,
     "Manufacturing Cost": 280.0
+  },
+  "63694cb0-8427-47ab-b9ed-bb417c6c1690": {
+    "Session ID": "63694cb0-8427-47ab-b9ed-bb417c6c1690",
+    "Team Name": "Prachi Jha",
+    "Team Members": "Prachi Jha",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T08:02:36.987336",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
