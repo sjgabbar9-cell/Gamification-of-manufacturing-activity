@@ -33,7 +33,7 @@ ACTIVITIES = {
         "effect_lines": {
             "Productivity": "+1,000 sqm/month in the activation month; the improved level then remains constant.",
             "Quality": "No change in the activation month or later active months.",
-            "Manufacturing Cost": "Decreases by 1 per sqm in the activation month; the reduced level then remains constant.",
+            "Manufacturing Cost": "Decreases by 100 per sqm in the activation month; the reduced level then remains constant.",
         },
     },
     "Changeover Time Optimization (SMED)": {
@@ -45,7 +45,7 @@ ACTIVITIES = {
         "effect_lines": {
             "Productivity": "+500 sqm/month in Active M1, then +100 sqm/month in each later active month.",
             "Quality": "No change in any active month.",
-            "Manufacturing Cost": "Decreases by 1 per sqm in every active month.",
+            "Manufacturing Cost": "Decreases by 100 per sqm in every active month.",
         },
     },
     "Run Beyond Equipment Rated Capacity": {
@@ -69,7 +69,7 @@ ACTIVITIES = {
         "effect_lines": {
             "Productivity": "+100 sqm/month in every active month.",
             "Quality": "No change in any active month.",
-            "Manufacturing Cost": "Decreases by 1 per sqm from the activation month and in every later active month.",
+            "Manufacturing Cost": "Decreases by 100 per sqm from the activation month and in every later active month.",
         },
     },
     "Statistical Process Control": {
@@ -93,7 +93,7 @@ ACTIVITIES = {
         "effect_lines": {
             "Productivity": "No change in Active M1, then +100 sqm/month in each later active month.",
             "Quality": "No change in Active M1, then +1 percentage point in each later active month.",
-            "Manufacturing Cost": "No change in Active M1, then decreases by 1 per sqm in each later active month.",
+            "Manufacturing Cost": "No change in Active M1, then decreases by 100 per sqm in each later active month.",
         },
     },
 }
