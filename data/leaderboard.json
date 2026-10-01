@@ -3,13 +3,13 @@
     "Session ID": "c5a35eb4-7653-4c24-9165-6eee0bca67b5",
     "Team Name": "M a",
     "Team Members": "MAA",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit": 0.0,
-    "Capital Budget Remaining": 1500.0,
-    "Updated At": "2026-10-01T05:18:13.425317",
-    "Productivity": 80,
-    "Quality %": 75,
-    "Manufacturing Cost": 30
+    "Month": 1,
+    "Selected Activity": "Parallel Equipment Installation (Line Balancing)",
+    "Cumulative Profit": 15.0,
+    "Capital Budget Remaining": 750.0,
+    "Updated At": "2026-10-01T05:19:15.752882",
+    "Productivity": 90.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 29.0
   }
 }
