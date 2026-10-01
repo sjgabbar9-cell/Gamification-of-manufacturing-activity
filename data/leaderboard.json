@@ -3,13 +3,13 @@
     "Session ID": "bc9cfa0e-9327-4c33-8f86-3b31be3575a5",
     "Team Name": "sassa",
     "Team Members": "saas",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit / sqm / sqm": 0.0,
-    "Capital Budget Remaining": 1500000.0,
-    "Updated At": "2026-10-01T06:09:26.440591",
-    "Productivity": 80000,
-    "Quality %": 75,
-    "Manufacturing Cost": 3000
+    "Month": 1,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm / sqm": 845.3416149068323,
+    "Capital Budget Remaining": 1125000.0,
+    "Updated At": "2026-10-01T06:11:00.278377",
+    "Productivity": 80500.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 2900.0
   }
 }
