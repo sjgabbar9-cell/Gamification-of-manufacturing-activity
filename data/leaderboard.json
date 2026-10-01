@@ -42,13 +42,13 @@
     "Session ID": "20069854-bbf0-4a19-b922-db5cd7409c93",
     "Team Name": "Surya",
     "Team Members": "XX",
-    "Month": 3,
-    "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit": 1677.5000000000005,
-    "Capital Budget Remaining": 450.0,
-    "Updated At": "2026-10-01T04:25:10.470579",
-    "Productivity": 88.0,
-    "Quality %": 79.0,
-    "Manufacturing Cost": 26.0
+    "Month": 4,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit": 3061.0000000000005,
+    "Capital Budget Remaining": 150.0,
+    "Updated At": "2026-10-01T04:25:36.355729",
+    "Productivity": 91.0,
+    "Quality %": 83.0,
+    "Manufacturing Cost": 23.0
   }
 }
