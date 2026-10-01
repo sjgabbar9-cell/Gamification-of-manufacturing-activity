@@ -76,5 +76,18 @@
     "Productivity": 80900.0,
     "Quality %": 87.00000000000001,
     "Manufacturing Cost": 2500.0
+  },
+  "b4f13bea-27dc-46cc-af18-eb1351dc6e11": {
+    "Session ID": "b4f13bea-27dc-46cc-af18-eb1351dc6e11",
+    "Team Name": "nbb",
+    "Team Members": "b nn",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T06:29:31.452605",
+    "Productivity": 80000,
+    "Quality %": 75,
+    "Manufacturing Cost": 3000
   }
 }
