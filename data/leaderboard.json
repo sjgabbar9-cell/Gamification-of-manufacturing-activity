@@ -63,5 +63,18 @@
     "Productivity": 80000,
     "Quality %": 75,
     "Manufacturing Cost": 3000
+  },
+  "b939b6fb-d4ec-4d81-a5ac-e02b91f907bf": {
+    "Session ID": "b939b6fb-d4ec-4d81-a5ac-e02b91f907bf",
+    "Team Name": "sad",
+    "Team Members": "ffuss",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T06:22:54.834288",
+    "Productivity": 80000,
+    "Quality %": 75,
+    "Manufacturing Cost": 3000
   }
 }
