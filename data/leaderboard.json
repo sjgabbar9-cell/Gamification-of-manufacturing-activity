@@ -3,13 +3,13 @@
     "Session ID": "23925d31-a9d5-4291-8901-b59276f5323f",
     "Team Name": "boisss",
     "Team Members": "noissee",
-    "Month": 1,
-    "Selected Activity": "Parallel Equipment Installation (Line Balancing)",
-    "Cumulative Profit / sqm": 75.74074074074075,
-    "Capital Budget Remaining": 750000.0,
-    "Updated At": "2026-10-01T06:47:29.279258",
-    "Productivity": 81000.0,
+    "Month": 2,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 166.1395137468757,
+    "Capital Budget Remaining": 375000.0,
+    "Updated At": "2026-10-01T06:47:49.051420",
+    "Productivity": 81500.0,
     "Quality %": 75.0,
-    "Manufacturing Cost": 290.0
+    "Manufacturing Cost": 280.0
   }
 }
