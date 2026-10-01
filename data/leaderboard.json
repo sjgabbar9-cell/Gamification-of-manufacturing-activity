@@ -16,13 +16,13 @@
     "Session ID": "513e0131-39db-4744-8fef-67f4fc0ffdce",
     "Team Name": "sassa",
     "Team Members": "sasa",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit": 0.0,
-    "Capital Budget Remaining": 1500.0,
-    "Updated At": "2026-10-01T05:23:27.698794",
-    "Productivity": 80,
-    "Quality %": 75,
-    "Manufacturing Cost": 30
+    "Month": 1,
+    "Selected Activity": "Parallel Equipment Installation (Line Balancing)",
+    "Cumulative Profit": 15.0,
+    "Capital Budget Remaining": 750.0,
+    "Updated At": "2026-10-01T05:25:33.703202",
+    "Productivity": 90.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 29.0
   }
 }
