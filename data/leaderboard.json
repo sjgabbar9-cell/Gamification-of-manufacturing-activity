@@ -11,5 +11,18 @@
     "Productivity": 81900.0,
     "Quality %": 64.99999999999999,
     "Manufacturing Cost": 2500.0
+  },
+  "34d66170-c70e-466f-8fc8-2beb82954852": {
+    "Session ID": "34d66170-c70e-466f-8fc8-2beb82954852",
+    "Team Name": "Hufflepuff",
+    "Team Members": "baron, draco, gregoyy",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-01T06:14:41.776775",
+    "Productivity": 80000,
+    "Quality %": 75,
+    "Manufacturing Cost": 3000
   }
 }
