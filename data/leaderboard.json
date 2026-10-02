@@ -50,5 +50,18 @@
     "Productivity": 80900.0,
     "Quality %": 87.00000000000001,
     "Manufacturing Cost": 250.0
+  },
+  "14ba5ce7-8402-4148-807d-293ae094636d": {
+    "Session ID": "14ba5ce7-8402-4148-807d-293ae094636d",
+    "Team Name": "chinmoy",
+    "Team Members": "chinmoy",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-02T05:54:17.373154",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
