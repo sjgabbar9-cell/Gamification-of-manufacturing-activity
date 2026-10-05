@@ -63,5 +63,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "7be24ab3-d06a-471f-a22b-f411cc6c1ba3": {
+    "Session ID": "7be24ab3-d06a-471f-a22b-f411cc6c1ba3",
+    "Team Name": "sdsd",
+    "Team Members": "sdsds",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-05T03:56:46.017077",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
