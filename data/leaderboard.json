@@ -81,13 +81,13 @@
     "Session ID": "e3f86c00-97e3-49e3-81d0-9208a244c257",
     "Team Name": "mm",
     "Team Members": "mm",
-    "Month": 2,
-    "Selected Activity": "Preventive Maintenance (CLTI)",
-    "Cumulative Profit / sqm": 181.6241427878732,
-    "Capital Budget Remaining": 825000.0,
-    "Updated At": "2026-10-07T11:34:57.245569",
-    "Productivity": 80700.0,
-    "Quality %": 75.0,
-    "Manufacturing Cost": 270.0
+    "Month": 3,
+    "Selected Activity": "Statistical Process Control",
+    "Cumulative Profit / sqm": 317.9158609584542,
+    "Capital Budget Remaining": 525000.0,
+    "Updated At": "2026-10-07T11:35:05.122536",
+    "Productivity": 80900.0,
+    "Quality %": 78.0,
+    "Manufacturing Cost": 250.0
   }
 }
