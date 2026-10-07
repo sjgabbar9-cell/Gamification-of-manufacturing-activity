@@ -81,13 +81,13 @@
     "Session ID": "e3f86c00-97e3-49e3-81d0-9208a244c257",
     "Team Name": "mm",
     "Team Members": "mm",
-    "Month": 1,
-    "Selected Activity": "Changeover Time Optimization (SMED)",
-    "Cumulative Profit / sqm": 80.3416149068323,
-    "Capital Budget Remaining": 1125000.0,
-    "Updated At": "2026-10-07T11:34:50.007204",
-    "Productivity": 80500.0,
+    "Month": 2,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit / sqm": 181.6241427878732,
+    "Capital Budget Remaining": 825000.0,
+    "Updated At": "2026-10-07T11:34:57.245569",
+    "Productivity": 80700.0,
     "Quality %": 75.0,
-    "Manufacturing Cost": 290.0
+    "Manufacturing Cost": 270.0
   }
 }
