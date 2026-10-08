@@ -146,13 +146,13 @@
     "Session ID": "a2b61bad-6a16-42a0-83f0-223719e4c669",
     "Team Name": "Deloitte ref 4",
     "Team Members": "Sweekrith",
-    "Month": 3,
-    "Selected Activity": "Operator Training & Performance Management",
-    "Cumulative Profit / sqm": 316.9726903908878,
-    "Capital Budget Remaining": 450000.0,
-    "Updated At": "2026-10-08T11:24:30.553671",
-    "Productivity": 80700.0,
-    "Quality %": 81.0,
-    "Manufacturing Cost": 270.0
+    "Month": 4,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit / sqm": 498.2689866871841,
+    "Capital Budget Remaining": 150000.0,
+    "Updated At": "2026-10-08T11:24:44.766488",
+    "Productivity": 81000.0,
+    "Quality %": 85.00000000000001,
+    "Manufacturing Cost": 240.0
   }
 }
