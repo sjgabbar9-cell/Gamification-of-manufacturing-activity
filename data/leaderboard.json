@@ -94,13 +94,13 @@
     "Session ID": "0d93ea75-5d34-4e73-acf6-efe05042e108",
     "Team Name": "Deloitte-ref1",
     "Team Members": "Subham",
-    "Month": 3,
-    "Selected Activity": "Preventive Maintenance (CLTI)",
-    "Cumulative Profit / sqm": 312.83119161058016,
-    "Capital Budget Remaining": 525000.0,
-    "Updated At": "2026-10-08T08:13:45.760881",
-    "Productivity": 80300.0,
-    "Quality %": 83.0,
-    "Manufacturing Cost": 270.0
+    "Month": 4,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 503.2015619809506,
+    "Capital Budget Remaining": 150000.0,
+    "Updated At": "2026-10-08T08:13:53.573442",
+    "Productivity": 81000.0,
+    "Quality %": 87.00000000000001,
+    "Manufacturing Cost": 240.0
   }
 }
