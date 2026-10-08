@@ -172,13 +172,13 @@
     "Session ID": "1ea19a8a-d259-4330-8749-332ff1e31252",
     "Team Name": "Deloitte ref -5",
     "Team Members": "M krishna",
-    "Month": 1,
-    "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit / sqm": 86.25,
-    "Capital Budget Remaining": 1200000.0,
-    "Updated At": "2026-10-08T11:30:46.378484",
-    "Productivity": 80000.0,
-    "Quality %": 78.0,
-    "Manufacturing Cost": 300.0
+    "Month": 2,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 196.59161490683235,
+    "Capital Budget Remaining": 825000.0,
+    "Updated At": "2026-10-08T11:31:00.366889",
+    "Productivity": 80500.0,
+    "Quality %": 81.0,
+    "Manufacturing Cost": 290.0
   }
 }
