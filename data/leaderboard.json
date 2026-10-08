@@ -120,13 +120,13 @@
     "Session ID": "329ac472-a754-4aba-8b0b-529316f91db6",
     "Team Name": "Deloitte ref 3",
     "Team Members": "Shubham",
-    "Month": 2,
-    "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit / sqm": 186.61953053958666,
-    "Capital Budget Remaining": 825000.0,
-    "Updated At": "2026-10-08T11:16:16.521709",
-    "Productivity": 80600.0,
-    "Quality %": 78.0,
-    "Manufacturing Cost": 280.0
+    "Month": 3,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit / sqm": 327.906659252458,
+    "Capital Budget Remaining": 525000.0,
+    "Updated At": "2026-10-08T11:16:28.167133",
+    "Productivity": 80800.0,
+    "Quality %": 81.0,
+    "Manufacturing Cost": 260.0
   }
 }
