@@ -133,13 +133,13 @@
     "Session ID": "3a0e23ed-6c34-4aaf-82e5-697d8fd1f929",
     "Team Name": "nnn",
     "Team Members": "www",
-    "Month": 1,
-    "Selected Activity": "Operator Training & Performance Management",
-    "Cumulative Profit / sqm": 70.3125,
-    "Capital Budget Remaining": 1125000.0,
-    "Updated At": "2026-10-08T11:17:22.468832",
-    "Productivity": 80000.0,
-    "Quality %": 75.0,
-    "Manufacturing Cost": 300.0
+    "Month": 2,
+    "Selected Activity": "Statistical Process Control",
+    "Cumulative Profit / sqm": 171.56718164794006,
+    "Capital Budget Remaining": 825000.0,
+    "Updated At": "2026-10-08T11:17:33.073706",
+    "Productivity": 80100.0,
+    "Quality %": 79.0,
+    "Manufacturing Cost": 290.0
   }
 }
