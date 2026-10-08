@@ -159,13 +159,13 @@
     "Session ID": "ad4ae9df-4851-4b0f-9c94-3c776ba2ebe5",
     "Team Name": "Deloitte ref-5",
     "Team Members": "M. Krishna",
-    "Month": 1,
+    "Month": 2,
     "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit / sqm": 86.25,
-    "Capital Budget Remaining": 1200000.0,
-    "Updated At": "2026-10-08T11:30:13.216536",
+    "Cumulative Profit / sqm": 202.5,
+    "Capital Budget Remaining": 900000.0,
+    "Updated At": "2026-10-08T11:30:13.393060",
     "Productivity": 80000.0,
-    "Quality %": 78.0,
+    "Quality %": 84.00000000000001,
     "Manufacturing Cost": 300.0
   }
 }
