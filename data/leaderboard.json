@@ -154,5 +154,18 @@
     "Productivity": 81000.0,
     "Quality %": 85.00000000000001,
     "Manufacturing Cost": 240.0
+  },
+  "ad4ae9df-4851-4b0f-9c94-3c776ba2ebe5": {
+    "Session ID": "ad4ae9df-4851-4b0f-9c94-3c776ba2ebe5",
+    "Team Name": "Deloitte ref-5",
+    "Team Members": "M. Krishna",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-08T11:29:51.699047",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
