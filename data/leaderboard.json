@@ -141,5 +141,18 @@
     "Productivity": 80600.0,
     "Quality %": 87.00000000000001,
     "Manufacturing Cost": 240.0
+  },
+  "a2b61bad-6a16-42a0-83f0-223719e4c669": {
+    "Session ID": "a2b61bad-6a16-42a0-83f0-223719e4c669",
+    "Team Name": "Deloitte ref 4",
+    "Team Members": "Sweekrith",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-08T11:23:40.475461",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
