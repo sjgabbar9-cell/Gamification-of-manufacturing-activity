@@ -107,13 +107,13 @@
     "Session ID": "9e08e0ff-a8f7-42a7-80eb-ea5ee2c77000",
     "Team Name": "Deloitte-Ref 2",
     "Team Members": "Subham",
-    "Month": 3,
-    "Selected Activity": "Changeover Time Optimization (SMED)",
-    "Cumulative Profit / sqm": 327.8729441599769,
-    "Capital Budget Remaining": 525000.0,
-    "Updated At": "2026-10-08T10:53:49.955633",
-    "Productivity": 80800.0,
-    "Quality %": 81.0,
-    "Manufacturing Cost": 260.0
+    "Month": 4,
+    "Selected Activity": "Operator Training & Performance Management",
+    "Cumulative Profit / sqm": 503.2433145303473,
+    "Capital Budget Remaining": 150000.0,
+    "Updated At": "2026-10-08T10:53:56.227052",
+    "Productivity": 81000.0,
+    "Quality %": 84.00000000000001,
+    "Manufacturing Cost": 240.0
   }
 }
