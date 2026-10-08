@@ -146,13 +146,13 @@
     "Session ID": "a2b61bad-6a16-42a0-83f0-223719e4c669",
     "Team Name": "Deloitte ref 4",
     "Team Members": "Sweekrith",
-    "Month": 1,
-    "Selected Activity": "Changeover Time Optimization (SMED)",
-    "Cumulative Profit / sqm": 80.3416149068323,
-    "Capital Budget Remaining": 1125000.0,
-    "Updated At": "2026-10-08T11:24:09.940040",
-    "Productivity": 80500.0,
-    "Quality %": 75.0,
-    "Manufacturing Cost": 290.0
+    "Month": 2,
+    "Selected Activity": "Statistical Process Control",
+    "Cumulative Profit / sqm": 186.61953053958666,
+    "Capital Budget Remaining": 825000.0,
+    "Updated At": "2026-10-08T11:24:18.700399",
+    "Productivity": 80600.0,
+    "Quality %": 78.0,
+    "Manufacturing Cost": 280.0
   }
 }
