@@ -172,13 +172,13 @@
     "Session ID": "1ea19a8a-d259-4330-8749-332ff1e31252",
     "Team Name": "Deloitte ref -5",
     "Team Members": "M krishna",
-    "Month": 2,
-    "Selected Activity": "Changeover Time Optimization (SMED)",
-    "Cumulative Profit / sqm": 196.59161490683235,
-    "Capital Budget Remaining": 825000.0,
-    "Updated At": "2026-10-08T11:31:00.366889",
-    "Productivity": 80500.0,
-    "Quality %": 81.0,
-    "Manufacturing Cost": 290.0
+    "Month": 3,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit / sqm": 342.8741427878732,
+    "Capital Budget Remaining": 525000.0,
+    "Updated At": "2026-10-08T11:31:16.667646",
+    "Productivity": 80700.0,
+    "Quality %": 84.00000000000001,
+    "Manufacturing Cost": 270.0
   }
 }
