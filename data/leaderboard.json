@@ -89,5 +89,18 @@
     "Productivity": 81100.0,
     "Quality %": 81.0,
     "Manufacturing Cost": 230.0
+  },
+  "0d93ea75-5d34-4e73-acf6-efe05042e108": {
+    "Session ID": "0d93ea75-5d34-4e73-acf6-efe05042e108",
+    "Team Name": "Deloitte-ref1",
+    "Team Members": "Subham",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-08T08:12:52.151650",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
