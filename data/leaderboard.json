@@ -24,5 +24,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "3be67edc-8086-497d-a31a-032387cd411e": {
+    "Session ID": "3be67edc-8086-497d-a31a-032387cd411e",
+    "Team Name": "Rokstar",
+    "Team Members": "Mr.sukla g\nMr.guptag\nMr.sunil",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-09T07:43:32.044246",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
