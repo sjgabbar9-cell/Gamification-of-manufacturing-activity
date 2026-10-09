@@ -89,5 +89,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "e065ca60-b430-49a2-b12b-e04b64af562a": {
+    "Session ID": "e065ca60-b430-49a2-b12b-e04b64af562a",
+    "Team Name": "Nandagopal  Das",
+    "Team Members": "Prasant,Umashankar Ji, Giriraj, Haribabu, Sunil,Minakshi,Subhasis",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-09T07:45:00.814364",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
