@@ -50,5 +50,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "dc74573e-3094-4a6d-9bf0-c6f1f528d062": {
+    "Session ID": "dc74573e-3094-4a6d-9bf0-c6f1f528d062",
+    "Team Name": "Champions",
+    "Team Members": "Poonam jangde",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-09T07:43:58.851442",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
