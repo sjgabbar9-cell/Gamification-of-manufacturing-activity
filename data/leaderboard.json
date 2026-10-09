@@ -37,5 +37,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "405b5310-03da-4c2f-b392-057e60741cb4": {
+    "Session ID": "405b5310-03da-4c2f-b392-057e60741cb4",
+    "Team Name": "Sharath",
+    "Team Members": "Arun verma sir\nShivam\nJithendar \nSurendar Kumar \nB. Das sir",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-09T07:43:34.379495",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
