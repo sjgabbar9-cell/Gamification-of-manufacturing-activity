@@ -16,13 +16,13 @@
     "Session ID": "9aa803eb-9008-4570-b3bf-733a7656d828",
     "Team Name": "Trial 2",
     "Team Members": "Chinmoy",
-    "Month": 2,
-    "Selected Activity": "Preventive Maintenance (CLTI)",
-    "Cumulative Profit / sqm": 197.50468164794012,
-    "Capital Budget Remaining": 900000.0,
-    "Updated At": "2026-10-15T04:54:04.229892",
-    "Productivity": 80100.0,
-    "Quality %": 81.0,
-    "Manufacturing Cost": 290.0
+    "Month": 3,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 342.8578414992412,
+    "Capital Budget Remaining": 525000.0,
+    "Updated At": "2026-10-15T04:54:16.903185",
+    "Productivity": 80700.0,
+    "Quality %": 84.00000000000001,
+    "Manufacturing Cost": 270.0
   }
 }
