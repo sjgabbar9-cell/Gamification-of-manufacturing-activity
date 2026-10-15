@@ -16,13 +16,13 @@
     "Session ID": "9aa803eb-9008-4570-b3bf-733a7656d828",
     "Team Name": "Trial 2",
     "Team Members": "Chinmoy",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit / sqm": 0.0,
-    "Capital Budget Remaining": 1500000.0,
-    "Updated At": "2026-10-15T04:53:33.643448",
+    "Month": 1,
+    "Selected Activity": "Statistical Process Control",
+    "Cumulative Profit / sqm": 86.25,
+    "Capital Budget Remaining": 1200000.0,
+    "Updated At": "2026-10-15T04:53:54.231434",
     "Productivity": 80000.0,
-    "Quality %": 75,
+    "Quality %": 78.0,
     "Manufacturing Cost": 300.0
   }
 }
