@@ -1,1 +1,15 @@
-{}
+{
+  "b42a5b95-a0e5-4afc-b776-cf0fcb3ebadb": {
+    "Session ID": "b42a5b95-a0e5-4afc-b776-cf0fcb3ebadb",
+    "Team Name": "Trial Team",
+    "Team Members": "Chinmoy",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-15T04:47:42.186591",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
+  }
+}
