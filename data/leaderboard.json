@@ -3,13 +3,13 @@
     "Session ID": "b42a5b95-a0e5-4afc-b776-cf0fcb3ebadb",
     "Team Name": "Trial Team",
     "Team Members": "Chinmoy",
-    "Month": 1,
-    "Selected Activity": "Statistical Process Control",
-    "Cumulative Profit / sqm": 86.25,
-    "Capital Budget Remaining": 1200000.0,
-    "Updated At": "2026-10-15T04:51:23.623366",
-    "Productivity": 80000.0,
-    "Quality %": 78.0,
-    "Manufacturing Cost": 300.0
+    "Month": 2,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 196.59161490683235,
+    "Capital Budget Remaining": 825000.0,
+    "Updated At": "2026-10-15T04:52:31.121452",
+    "Productivity": 80500.0,
+    "Quality %": 81.0,
+    "Manufacturing Cost": 290.0
   }
 }
