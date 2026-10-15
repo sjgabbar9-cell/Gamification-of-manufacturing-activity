@@ -37,5 +37,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "0ee95a9c-64f9-4f4f-88b5-df9f7f0c8396": {
+    "Session ID": "0ee95a9c-64f9-4f4f-88b5-df9f7f0c8396",
+    "Team Name": "Last Trial",
+    "Team Members": "Chinmoy",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-15T14:26:35.317254",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
