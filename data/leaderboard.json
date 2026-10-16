@@ -50,5 +50,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "e1272549-eaa1-4021-9688-aa7e46e03e5e": {
+    "Session ID": "e1272549-eaa1-4021-9688-aa7e46e03e5e",
+    "Team Name": "Table 3",
+    "Team Members": "Srinivas",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-16T08:14:46.697270",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
