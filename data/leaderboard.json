@@ -11,5 +11,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "2e83d5fe-6811-4da0-b671-6d9001e59d99": {
+    "Session ID": "2e83d5fe-6811-4da0-b671-6d9001e59d99",
+    "Team Name": "Arvind Kumar",
+    "Team Members": "DVR, AK, KL, AJ, Deepak",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-16T08:14:16.253141",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
