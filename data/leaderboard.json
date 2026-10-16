@@ -55,14 +55,14 @@
     "Session ID": "e1272549-eaa1-4021-9688-aa7e46e03e5e",
     "Team Name": "Table 3",
     "Team Members": "Srinivas",
-    "Month": 3,
-    "Selected Activity": "Preventive Maintenance (CLTI)",
-    "Cumulative Profit / sqm": 327.82185162094765,
-    "Capital Budget Remaining": 525000.0,
-    "Updated At": "2026-10-16T08:19:11.218573",
-    "Productivity": 80200.0,
-    "Quality %": 85.00000000000001,
-    "Manufacturing Cost": 280.0
+    "Month": 4,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 518.186499334174,
+    "Capital Budget Remaining": 150000.0,
+    "Updated At": "2026-10-16T08:21:02.330950",
+    "Productivity": 80900.0,
+    "Quality %": 89.00000000000001,
+    "Manufacturing Cost": 250.0
   },
   "74237eb4-c97a-46e2-9500-3b96ccaaf270": {
     "Session ID": "74237eb4-c97a-46e2-9500-3b96ccaaf270",
