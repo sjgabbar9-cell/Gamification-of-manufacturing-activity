@@ -42,14 +42,14 @@
     "Session ID": "12de5e54-bb6b-4278-8981-23a821215a80",
     "Team Name": "Table 5",
     "Team Members": "Kuldeep, sanjay, rajesh, bala, krishna,, krishna 2",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit / sqm": 0.0,
-    "Capital Budget Remaining": 1500000.0,
-    "Updated At": "2026-10-16T08:14:46.428889",
-    "Productivity": 80000.0,
-    "Quality %": 75,
-    "Manufacturing Cost": 300.0
+    "Month": 1,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 80.3416149068323,
+    "Capital Budget Remaining": 1125000.0,
+    "Updated At": "2026-10-16T08:17:41.317698",
+    "Productivity": 80500.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 290.0
   },
   "e1272549-eaa1-4021-9688-aa7e46e03e5e": {
     "Session ID": "e1272549-eaa1-4021-9688-aa7e46e03e5e",
