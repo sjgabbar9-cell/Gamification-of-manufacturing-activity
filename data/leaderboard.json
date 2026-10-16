@@ -68,13 +68,13 @@
     "Session ID": "74237eb4-c97a-46e2-9500-3b96ccaaf270",
     "Team Name": "Table 6",
     "Team Members": "Pramod Kumar",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit / sqm": 0.0,
-    "Capital Budget Remaining": 1500000.0,
-    "Updated At": "2026-10-16T08:15:01.222507",
-    "Productivity": 80000.0,
-    "Quality %": 75,
-    "Manufacturing Cost": 300.0
+    "Month": 1,
+    "Selected Activity": "Preventive Maintenance (CLTI)",
+    "Cumulative Profit / sqm": 81.25468164794007,
+    "Capital Budget Remaining": 1200000.0,
+    "Updated At": "2026-10-16T08:17:26.195565",
+    "Productivity": 80100.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 290.0
   }
 }
