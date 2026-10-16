@@ -89,5 +89,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "b5225a6d-0e2f-4475-9323-3ffa42699e9c": {
+    "Session ID": "b5225a6d-0e2f-4475-9323-3ffa42699e9c",
+    "Team Name": "x",
+    "Team Members": "x",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-16T08:23:55.494104",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
