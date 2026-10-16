@@ -3,14 +3,14 @@
     "Session ID": "99a37d4f-1fd1-4e27-844d-3b28ae8e32dd",
     "Team Name": "Vinay Yati",
     "Team Members": "Table number 2",
-    "Month": 0,
-    "Selected Activity": "Registered - Not Started",
-    "Cumulative Profit / sqm": 0.0,
-    "Capital Budget Remaining": 1500000.0,
-    "Updated At": "2026-10-16T08:13:57.063497",
-    "Productivity": 80000.0,
-    "Quality %": 75,
-    "Manufacturing Cost": 300.0
+    "Month": 1,
+    "Selected Activity": "Changeover Time Optimization (SMED)",
+    "Cumulative Profit / sqm": 80.3416149068323,
+    "Capital Budget Remaining": 1125000.0,
+    "Updated At": "2026-10-16T08:18:32.278913",
+    "Productivity": 80500.0,
+    "Quality %": 75.0,
+    "Manufacturing Cost": 290.0
   },
   "2e83d5fe-6811-4da0-b671-6d9001e59d99": {
     "Session ID": "2e83d5fe-6811-4da0-b671-6d9001e59d99",
