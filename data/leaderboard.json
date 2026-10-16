@@ -63,5 +63,18 @@
     "Productivity": 80000.0,
     "Quality %": 75,
     "Manufacturing Cost": 300.0
+  },
+  "74237eb4-c97a-46e2-9500-3b96ccaaf270": {
+    "Session ID": "74237eb4-c97a-46e2-9500-3b96ccaaf270",
+    "Team Name": "Table 6",
+    "Team Members": "Pramod Kumar",
+    "Month": 0,
+    "Selected Activity": "Registered - Not Started",
+    "Cumulative Profit / sqm": 0.0,
+    "Capital Budget Remaining": 1500000.0,
+    "Updated At": "2026-10-16T08:15:01.222507",
+    "Productivity": 80000.0,
+    "Quality %": 75,
+    "Manufacturing Cost": 300.0
   }
 }
